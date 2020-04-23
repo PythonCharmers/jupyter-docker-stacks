@@ -25,7 +25,6 @@ botocore==1.15.28
 branca==0.4.0
 bs4==0.0.1
 bson==0.5.9
-Cartopy===0.17.1.dev174-
 certbot==0.31.0
 certbot-nginx==0.31.0
 certifi==2019.11.28

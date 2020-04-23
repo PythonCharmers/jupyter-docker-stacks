@@ -4,6 +4,9 @@
 # Ubuntu 18.04 (bionic)
 # https://hub.docker.com/_/ubuntu/?tab=tags&name=bionic
 # OS/ARCH: linux/amd64
+
+# modified by Errol Lloyd
+
 ARG ROOT_CONTAINER=ubuntu:bionic-20200311@sha256:e5dd9dbb37df5b731a6688fa49f4003359f6f126958c9c928f937bec69836320
 ARG BASE_CONTAINER=$ROOT_CONTAINER
 FROM $BASE_CONTAINER

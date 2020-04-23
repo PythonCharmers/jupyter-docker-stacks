@@ -20,7 +20,10 @@ COPY requirements.txt /home/$NB_UID/requirements.txt
 #     --file /home/$NB_UID/requirements.txt \
 #     && \
 RUN pip install -r /home/$NB_UID/requirements.txt
-RUN conda clean --all -f -y && \
+RUN conda install --quiet --yes \
+    'conda-forge::blas=*=openblas'\
+    && \
+    conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # Also activate ipywidgets extension for JupyterLab

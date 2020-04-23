@@ -13,11 +13,11 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
-COPY requirements.txt ~/requirements.txt
+COPY requirements.txt /home/$NB_UID/requirements.txt
 
 # Install Python 3 packages
 RUN conda install --quiet --yes \
-    --file ~/requirements.txt \
+    --file /home/$NB_UID/requirements.txt \
     && \
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server

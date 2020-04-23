@@ -5,4 +5,4 @@ USER $NB_UID
 
 COPY requirements.txt /home/$NB_UID/requirements.txt
 
-RUN pip instal -r requirements.txt
+RUN pip install -r requirements.txt

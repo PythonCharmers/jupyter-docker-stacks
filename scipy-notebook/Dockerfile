@@ -16,12 +16,9 @@ USER $NB_UID
 COPY requirements.txt /home/$NB_UID/requirements.txt
 
 # Install Python 3 packages
-# RUN conda install --quiet --yes \
-#     --file /home/$NB_UID/requirements.txt \
-#     && \
-RUN pip install -r /home/$NB_UID/requirements.txt
+# RUN pip install -r /home/$NB_UID/requirements.txt
 RUN conda install --quiet --yes \
-    'conda-forge::blas=*=openblas'\
+    --file /home/$NB_UID/requirements.txt \
     && \
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server

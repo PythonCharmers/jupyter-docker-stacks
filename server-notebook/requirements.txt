@@ -1,6 +1,8 @@
 altair
 vega-datasets
+plotly
 requests
 textdistance
 jellyfish
 networkx
+yellowbrick

@@ -13,36 +13,11 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
+COPY requirements.txt ~/requirements.txt
 
 # Install Python 3 packages
 RUN conda install --quiet --yes \
-    'beautifulsoup4=4.8.*' \
-    'conda-forge::blas=*=openblas' \
-    'bokeh=2.0.*' \
-    'cloudpickle=1.3.*' \
-    'cython=0.29.*' \
-    'dask=2.14.*' \
-    'dill=0.3.*' \
-    'h5py=2.10.*' \
-    'hdf5=1.10.*' \
-    'ipywidgets=7.5.*' \
-    'ipympl=0.5.*'\
-    'matplotlib-base=3.2.*' \
-    'numba=0.48.*' \
-    'numexpr=2.7.*' \
-    'pandas=1.0.*' \
-    'patsy=0.5.*' \
-    'protobuf=3.11.*' \
-    'scikit-image=0.16.*' \
-    'scikit-learn=0.22.*' \
-    'scipy=1.4.*' \
-    'seaborn=0.10.*' \
-    'sqlalchemy=1.3.*' \
-    'statsmodels=0.11.*' \
-    'sympy=1.5.*' \
-    'vincent=0.4.*' \
-    'widgetsnbextension=3.5.*'\
-    'xlrd' \
+    --file ~/requirements.txt \
     && \
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
@@ -50,9 +25,17 @@ RUN conda install --quiet --yes \
     # Also activate ipywidgets extension for JupyterLab
     # Check this URL for most recent compatibilities
     # https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager@^2.0.0 --no-build && \
-    jupyter labextension install @bokeh/jupyter_bokeh@^2.0.0 --no-build && \
-    jupyter labextension install jupyter-matplotlib@^0.7.2 --no-build && \
+
+    # changing versions of lab extensions to jupyterLab v1.2 compatible
+
+    # jupyter labextension install @jupyter-widgets/jupyterlab-manager@^2.0.0 --no-build && \
+    jupyter labextension install @jupyter-widgets/jupyterlab-manager@^1.1 --no-build && \
+
+    # jupyter labextension install @bokeh/jupyter_bokeh@^2.0.0 --no-build && \
+    jupyter labextension install @bokeh/jupyter_bokeh@^1.0.0 --no-build && \
+
+    # This labextension doesn't seem to be worth the effort
+    # jupyter labextension install jupyter-matplotlib@^0.7.2 --no-build && \
     jupyter lab build -y && \
     jupyter lab clean -y && \
     npm cache clean --force && \
@@ -61,15 +44,17 @@ RUN conda install --quiet --yes \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
+# Not necessary for us, and probably not worth the hassle
+
 # Install facets which does not have a pip or conda package at the moment
-RUN cd /tmp && \
-    git clone https://github.com/PAIR-code/facets.git && \
-    cd facets && \
-    jupyter nbextension install facets-dist/ --sys-prefix && \
-    cd && \
-    rm -rf /tmp/facets && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+# RUN cd /tmp && \
+#     git clone https://github.com/PAIR-code/facets.git && \
+#     cd facets && \
+#     jupyter nbextension install facets-dist/ --sys-prefix && \
+#     cd && \
+#     rm -rf /tmp/facets && \
+#     fix-permissions $CONDA_DIR && \
+#     fix-permissions /home/$NB_USER
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME /home/$NB_USER/.cache/

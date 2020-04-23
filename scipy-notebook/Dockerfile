@@ -25,15 +25,11 @@ RUN conda install --quiet --yes \
     # Also activate ipywidgets extension for JupyterLab
     # Check this URL for most recent compatibilities
     # https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
-
     # changing versions of lab extensions to jupyterLab v1.2 compatible
-
     # jupyter labextension install @jupyter-widgets/jupyterlab-manager@^2.0.0 --no-build && \
     jupyter labextension install @jupyter-widgets/jupyterlab-manager@^1.1 --no-build && \
-
     # jupyter labextension install @bokeh/jupyter_bokeh@^2.0.0 --no-build && \
     jupyter labextension install @bokeh/jupyter_bokeh@^1.0.0 --no-build && \
-
     # This labextension doesn't seem to be worth the effort
     # jupyter labextension install jupyter-matplotlib@^0.7.2 --no-build && \
     jupyter lab build -y && \

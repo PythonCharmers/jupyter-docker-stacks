@@ -112,7 +112,7 @@ RUN conda install --quiet --yes 'tini=0.18.0' && \
 RUN conda install --quiet --yes \
     'notebook=6.0.3' \
     'jupyterhub=1.1.0' \
-    'jupyterlab=2.0.1' && \
+    'jupyterlab=1.2.0' && \
     conda clean --all -f -y && \
     npm cache clean --force && \
     jupyter notebook --generate-config && \

@@ -22,11 +22,11 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     netcat \
     python-dev \
     # ---- nbconvert dependencies ----
-    texlive-xetex \
-    texlive-fonts-recommended \
-    texlive-generic-recommended \
+    # texlive-xetex \
+    # texlive-fonts-recommended \
+    # texlive-generic-recommended \
     # Optional dependency
-    texlive-fonts-extra \
+    # texlive-fonts-extra \
     # ----
     tzdata \
     unzip \

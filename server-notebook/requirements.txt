@@ -6,3 +6,5 @@ textdistance
 jellyfish
 networkx
 yellowbrick
+eli5
+voila

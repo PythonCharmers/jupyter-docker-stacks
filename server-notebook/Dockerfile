@@ -5,4 +5,4 @@ USER $NB_UID
 
 COPY requirements.txt /home/$NB_UID/requirements.txt
 
-RUN pip install -r /home/$NB_UID/requirements.txt
+RUN pip install --no-cache-dir -r /home/$NB_UID/requirements.txt

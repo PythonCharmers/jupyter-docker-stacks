@@ -6,6 +6,7 @@ eli5
 Flask
 graphviz
 jellyfish
+jupyter_contrib_nbextensions
 nbconvert
 networkx
 Pillow

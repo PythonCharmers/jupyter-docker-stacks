@@ -201,7 +201,6 @@ pysal==2.2.0
 pyserial==3.4
 pyshp==2.1.0
 pytest==5.4.1
-python-apt==1.6.5+ubuntu0.2
 python-dateutil==2.8.1
 python-debian==0.1.32
 python-Levenshtein==0.12.0

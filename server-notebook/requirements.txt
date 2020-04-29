@@ -257,7 +257,6 @@ statsmodels==0.11.1
 suod==0.0.3
 swagger-ui-bundle==0.0.6
 sympy==1.5.1
-systemd-python==234
 tables==3.6.1
 tabulate==0.8.6
 tblib==1.6.0

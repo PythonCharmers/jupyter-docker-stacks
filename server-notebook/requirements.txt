@@ -115,7 +115,6 @@ jupyterlab-pygments==0.1.0
 jupyterlab-server==1.0.7
 jupyterthemes==0.20.0
 kiwisolver==1.1.0
-language-selector==0.1
 lesscpy==0.14.0
 libpysal==4.2.2
 llvmlite==0.31.0

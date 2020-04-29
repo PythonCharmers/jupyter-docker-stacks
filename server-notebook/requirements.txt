@@ -189,7 +189,6 @@ PyDispatcher==2.0.5
 pyepsg==0.4.0
 pyflakes==2.1.1
 Pygments==2.6.1
-pygobject==3.26.1
 PyICU==1.9.8
 PyJWT==1.5.3
 pyod==0.7.7.1

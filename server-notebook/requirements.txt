@@ -73,7 +73,6 @@ future==0.15.2
 giddy==2.3.0
 graphviz==0.13.2
 HeapDict==1.0.1
-hibagent==1.0.1
 httplib2==0.9.2
 hvac==0.10.0
 hyperlink==17.3.1

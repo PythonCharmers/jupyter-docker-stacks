@@ -151,7 +151,6 @@ openapi-spec-validator==0.2.8
 openpyxl==3.0.3
 osmnx==0.10
 packaging==20.3
-PAM==0.4.2
 pandas==1.0.3
 pandas-bokeh==0.2
 pandocfilters==1.4.2

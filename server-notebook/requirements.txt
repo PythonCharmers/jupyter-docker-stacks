@@ -70,7 +70,6 @@ Flask-SQLAlchemy==2.4.1
 folium==0.10.1
 fsspec==0.6.2
 future==0.15.2
-GDAL==2.4.0
 giddy==2.3.0
 graphviz==0.13.2
 HeapDict==1.0.1

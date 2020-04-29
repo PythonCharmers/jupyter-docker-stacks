@@ -42,7 +42,6 @@ connexion==2.6.0
 constantly==15.1.0
 contextily==1.0rc2
 cookiecutter==1.7.0
-cryptography==2.1.4
 cssselect==1.1.0
 cx-Freeze==6.1
 cycler==0.10.0
@@ -184,12 +183,10 @@ pyasn1==0.4.2
 pyasn1-modules==0.2.1
 pycodestyle==2.5.0
 pycodestyle-magic==0.5
-pycrypto==2.6.1
 PyDispatcher==2.0.5
 pyepsg==0.4.0
 pyflakes==2.1.1
 Pygments==2.6.1
-PyICU==1.9.8
 PyJWT==1.5.3
 pyod==0.7.7.1
 pyOpenSSL==17.5.0

@@ -5,4 +5,8 @@ USER $NB_UID
 
 COPY requirements.txt /home/$NB_UID/requirements.txt
 
-RUN pip install -r /home/$NB_UID/requirements.txt
+RUN pip install --no-cache-dir -r /home/$NB_UID/requirements.txt
+
+# Relies on jupyter_contrib_nbextensions installation
+RUN jupyter contrib nbextension install --user
+RUN jupyter nbextension enable varInspector/main

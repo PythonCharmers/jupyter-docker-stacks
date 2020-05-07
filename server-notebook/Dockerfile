@@ -24,8 +24,10 @@ USER root
 RUN mkdir /etc/supervisor
 RUN mkdir /etc/supervisor/conf.d
 RUN mkdir /var/log/supervisor
+RUN mkdir /var/run/supervisor
 # NB_USER write permissions for log file as supervisor being run by NB_USER
 RUN fix-permissions /var/log/supervisor
+RUN fix-permissions /var/run/supervisor
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 
 COPY watchmedo.conf  /etc/supervisor/conf.d/watchmedo.conf

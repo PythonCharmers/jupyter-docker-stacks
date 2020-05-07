@@ -1,9 +1,9 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-ARG BASE_CONTAINER=maegul/base-notebook
-FROM $BASE_CONTAINER
+# ARG BASE_CONTAINER=pythoncharmers/base-notebook:latest
+# FROM $BASE_CONTAINER
+FROM pythoncharmers/base-notebook:latest
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 
 USER root
 

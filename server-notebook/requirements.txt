@@ -18,4 +18,5 @@ textdistance
 wikipedia
 vega-datasets
 voila
+keyring
 yellowbrick

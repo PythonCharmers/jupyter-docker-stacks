@@ -12,9 +12,10 @@ RUN pip install --no-cache-dir nbgitpuller
 RUN jupyter contrib nbextension install --user
 RUN jupyter nbextension enable varInspector/main
 
-## Setting up supervisor
+## Setting up supervisor and watchmedo
 
 RUN pip install --no-cache-dir supervisor
+RUN pip install --no-cache-dir watchdog[watchmedo]
 
 USER root
 
@@ -23,3 +24,5 @@ RUN mkdir /etc/supervisor/conf.d
 
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 # RUN echo_supervisord_conf > /etc/supervisord.conf
+COPY watchmedo.conf  /etc/supervisor/conf.d/watchmedo.conf
+COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml

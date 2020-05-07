@@ -31,6 +31,8 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY watchmedo.conf  /etc/supervisor/conf.d/watchmedo.conf
 COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
 
+USER $NB_USER
+
 COPY jupyter_supervisor_start.sh /usr/local/bin/jupyter_supervisor_start.sh
 
 

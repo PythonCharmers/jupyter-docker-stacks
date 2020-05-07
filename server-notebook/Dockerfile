@@ -4,20 +4,24 @@ FROM jupyter/scipy-notebook:e255f1aa00b2
 
 USER $NB_UID
 
+# Python packaging for workshops is controlled through requirements.txt file
+# Copy to image and use to install packages
 COPY requirements.txt /home/$NB_UID/requirements.txt
-
 RUN pip install --no-cache-dir -r /home/$NB_UID/requirements.txt
+
+# supplementary package - for controlled git pulling into images accross whole cluster
 RUN pip install --no-cache-dir nbgitpuller
 
+# Jupyter nbextension installation and acivation
 # Relies on jupyter_contrib_nbextensions installation
 RUN jupyter contrib nbextension install --user
 RUN jupyter nbextension enable varInspector/main
 
-## Setting up supervisor and watchmedo
-
+## Installing and Setting up supervisor and watchmedo
 RUN pip install --no-cache-dir supervisor
 RUN pip install --no-cache-dir watchdog[watchmedo]
 
+# Change to root for creating log and config file locations
 USER root
 
 # Folders for config and log files
@@ -25,18 +29,19 @@ RUN mkdir /etc/supervisor
 RUN mkdir /etc/supervisor/conf.d
 RUN mkdir /var/log/supervisor
 RUN mkdir /var/run/supervisor
-# NB_USER write permissions for log file as supervisor being run by NB_USER
+# NB_USER write permissions for log and running files as supervisor being run by NB_USER
 RUN fix-permissions /var/log/supervisor
 RUN fix-permissions /var/run/supervisor
-COPY supervisord.conf /etc/supervisor/supervisord.conf
 
-COPY watchmedo.conf  /etc/supervisor/conf.d/watchmedo.conf
+# Copying config files for supervisor and watchmedo
+COPY supervisord.conf /etc/supervisor/supervisord.conf
+COPY watchmedo.conf /etc/supervisor/conf.d/watchmedo.conf
 COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
 
+# Go back to nb_user at end and before copying exec command script (just in case permissions are affected)
 USER $NB_USER
 
 COPY jupyter_supervisor_start.sh /usr/local/bin/jupyter_supervisor_start.sh
-
 
 # New command for when container is executed
 # Overwrites CMD entry from base-notebook - only one CMD entry per container

@@ -24,10 +24,10 @@ USER root
 RUN mkdir /etc/supervisor
 RUN mkdir /etc/supervisor/conf.d
 RUN mkdir /var/log/supervisor
-RUN mkdir /var/log/jupyter
-
+# NB_USER write permissions for log file as supervisor being run by NB_USER
+RUN fix-permissions /var/log/supervisor
 COPY supervisord.conf /etc/supervisor/supervisord.conf
-# RUN echo_supervisord_conf > /etc/supervisord.conf
+
 COPY watchmedo.conf  /etc/supervisor/conf.d/watchmedo.conf
 COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
 

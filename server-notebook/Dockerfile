@@ -1,6 +1,6 @@
 # Build of jupyter/scipy-notebook from before jupyterlab was bumped up to v2
-# FROM jupyter/scipy-notebook:e255f1aa00b2
-FROM pythoncharmers/scipy-notebook:latest
+FROM jupyter/scipy-notebook:e255f1aa00b2
+# FROM pythoncharmers/scipy-notebook:latest
 
 USER $NB_UID
 
@@ -30,3 +30,8 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 # RUN echo_supervisord_conf > /etc/supervisord.conf
 COPY watchmedo.conf  /etc/supervisor/conf.d/watchmedo.conf
 COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
+
+# New command for when container is executed
+# Overwrites CMD entry from base-notebook - only one CMD entry per container
+# Purpose is to include supervisord at start of image
+CMD ["jupyter_supervisor_start.sh"]

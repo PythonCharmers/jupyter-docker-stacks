@@ -19,8 +19,11 @@ RUN pip install --no-cache-dir watchdog[watchmedo]
 
 USER root
 
+# Folders for config and log files
 RUN mkdir /etc/supervisor
 RUN mkdir /etc/supervisor/conf.d
+RUN mkdir /var/log/supervisor
+RUN mkdir /var/log/jupyter
 
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 # RUN echo_supervisord_conf > /etc/supervisord.conf

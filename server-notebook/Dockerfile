@@ -15,3 +15,7 @@ RUN jupyter nbextension enable varInspector/main
 ## Setting up supervisor
 
 RUN pip install --no-cache-dir supervisor
+
+USER root
+
+RUN echo_supervisord_conf > /etc/supervisord.conf

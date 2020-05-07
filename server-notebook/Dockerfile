@@ -22,6 +22,4 @@ RUN mkdir /etc/supervisor
 RUN mkdir /etc/supervisor/conf.d
 
 COPY supervisord.conf /etc/supervisor/supervisord.conf
-
-
-RUN echo_supervisord_conf > /etc/supervisord.conf
+# RUN echo_supervisord_conf > /etc/supervisord.conf

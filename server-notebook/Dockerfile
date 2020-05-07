@@ -38,6 +38,9 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY watchmedo.conf /etc/supervisor/conf.d/watchmedo.conf
 COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
 
+# setting up custom jupyter css and js
+COPY custom/ /home/$NB_USER/.jupyter/
+
 # Go back to nb_user at end and before copying exec command script (just in case permissions are affected)
 USER $NB_USER
 

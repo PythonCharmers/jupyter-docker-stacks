@@ -18,4 +18,10 @@ RUN pip install --no-cache-dir supervisor
 
 USER root
 
+RUN mk /etc/supervisor
+RUN mk /etc/supervisor/conf.d
+
+COPY supervisor.conf /etc/supervisor/supervisor.conf
+
+
 RUN echo_supervisord_conf > /etc/supervisord.conf

@@ -31,6 +31,9 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY watchmedo.conf  /etc/supervisor/conf.d/watchmedo.conf
 COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
 
+COPY jupyter_supervisor_start.sh /usr/local/bin/jupyter_supervisor_start.sh
+
+
 # New command for when container is executed
 # Overwrites CMD entry from base-notebook - only one CMD entry per container
 # Purpose is to include supervisord at start of image

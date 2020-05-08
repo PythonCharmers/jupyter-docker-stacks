@@ -44,7 +44,7 @@ COPY custom /home/$NB_USER/.jupyter/custom
 # Setting up custom jupyter lab settings
 RUN mkdir -p /home/$NB_USER/.jupyter/lab/user-settings/'@jupyterlab'
 COPY lab_user_settings/ /home/$NB_USER/.jupyter/lab/user-settings/'@jupyterlab'
-COPY ./jupyterlab_course_theme/ /home/$NB_USER/.jupyter/lab/course_theme
+COPY ./customtheme/ /home/$NB_USER/.jupyter/lab/course_theme
 # Allow user to change their settings
 RUN fix-permissions /home/$NB_USER/.jupyter/lab
 

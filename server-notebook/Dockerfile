@@ -41,6 +41,10 @@ COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
 # setting up custom jupyter css and js
 COPY custom /home/$NB_USER/.jupyter/custom
 
+# Setting up custom jupyter lab settings
+COPY lab_user_settings/ /home/$NB_USER/.jupyter/lab/user-settings/'@jupyterlab'
+
+
 # Go back to nb_user at end and before copying exec command script (just in case permissions are affected)
 USER $NB_USER
 

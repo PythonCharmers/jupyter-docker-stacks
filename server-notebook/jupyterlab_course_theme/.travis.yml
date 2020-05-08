@@ -13,8 +13,8 @@ install:
   - pip install --upgrade ".[test]" -v
 script:
   - jupyter nbextension list
-  - jupyter nbextension enable --py --sys-prefix course_theme
+  - jupyter nbextension enable --py --sys-prefix jupyterlab_course_theme
   - pip install jupyterlab
   - jupyter labextension list
-  - jupyter labextension list 2>&1 | grep -q course_theme
+  - jupyter labextension list 2>&1 | grep -q jupyterlab_course_theme
   - jupyter labextension link

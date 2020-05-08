@@ -6,16 +6,16 @@ import {
 import { IThemeManager } from '@jupyterlab/apputils';
 
 /**
- * A plugin for PythonCharmers/course_theme
+ * A plugin for pythoncharmers/jupyterlab_course_theme
  */
 const plugin: JupyterFrontEndPlugin<void> = {
-  id: 'PythonCharmers/course_theme:plugin',
+  id: 'pythoncharmers/jupyterlab_course_theme:plugin',
   requires: [IThemeManager],
   activate: function(app: JupyterFrontEnd, manager: IThemeManager) {
-    const style = 'PythonCharmers/course_theme/index.css';
+    const style = 'pythoncharmers/jupyterlab_course_theme/index.css';
 
     manager.register({
-      name: 'course_theme',
+      name: 'jupyterlab_course_theme',
       isLight: true,
       load: () => manager.loadCSS(style),
       unload: () => Promise.resolve(undefined)

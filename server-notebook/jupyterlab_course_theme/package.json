@@ -1,7 +1,7 @@
 {
-  "name": "PythonCharmers/course_theme",
+  "name": "pythoncharmers/jupyterlab_course_theme",
   "version": "0.1.0",
-  "description": "Custom jupyterlab theme for course participants",
+  "description": "Custom theme for courses",
   "author": "Python Charmers",
   "keywords": [
     "jupyter",

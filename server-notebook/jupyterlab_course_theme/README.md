@@ -1,6 +1,6 @@
-# PythonCharmers/course_theme
+# pythoncharmers/jupyterlab_course_theme
 
-Custom jupyterlab theme for course participants
+Custom theme for courses
 
 ## Prerequisites
 
@@ -9,7 +9,7 @@ Custom jupyterlab theme for course participants
 ## Installation
 
 ```bash
-jupyter labextension install PythonCharmers/course_theme
+jupyter labextension install pythoncharmers/jupyterlab_course_theme
 ```
 
 ## Development

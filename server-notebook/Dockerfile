@@ -42,12 +42,10 @@ COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
 COPY custom /home/$NB_USER/.jupyter/custom
 
 # Setting up custom jupyter lab settings
-ARG LAB_USER_SETTTING_DIR = /home/$NB_USER/.jupyter/lab/user-settings/'@jupyterlab'
-RUN mkdir $LAB_USER_SETTTING_DIR 
-
-# Allow user to change their settings
-RUN fix-permissions $LAB_USER_SETTTING_DIR
+RUN mkdir -p /home/$NB_USER/.jupyter/lab/user-settings/'@jupyterlab'
 COPY lab_user_settings/ /home/$NB_USER/.jupyter/lab/user-settings/'@jupyterlab'
+# Allow user to change their settings
+RUN fix-permissions /home/$NB_USER/.jupyter/lab
 
 
 # Go back to nb_user at end and before copying exec command script (just in case permissions are affected)

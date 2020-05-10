@@ -60,8 +60,10 @@ USER $NB_USER
 RUN jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build
 RUN jupyter lab build -y && \
     jupyter lab clean -y
+# >> Remove npm/yarn crud from jupyterlab installations
 RUN rm -rf /home/$NB_USER/.cache/yarn
 RUN rm -rf /home/$NB_USER/.jupyter/lab/course_theme
+RUN npm cache clean --force
 
 # > Custom Entrypoint
 COPY jupyter_supervisor_start.sh /usr/local/bin/jupyter_supervisor_start.sh

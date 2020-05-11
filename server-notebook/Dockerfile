@@ -23,26 +23,7 @@ RUN pip install --no-cache-dir nbgitpuller
 RUN pip install --no-cache-dir supervisor
 RUN pip install --no-cache-dir watchdog[watchmedo]
 
-# >> Config and processes
-# Change to root for creating log and config file locations
 USER root
-
-# >>> Folders for config and log files
-RUN mkdir /etc/supervisor
-RUN mkdir /etc/supervisor/conf.d
-RUN mkdir /var/log/supervisor
-RUN mkdir /var/run/supervisor
-# NB_USER write permissions for log and running files as supervisor being run by NB_USER
-RUN fix-permissions /var/log/supervisor
-RUN fix-permissions /var/run/supervisor
-
-# >>> Copying config files for supervisor and watchmedo
-COPY supervisord.conf /etc/supervisor/supervisord.conf
-COPY watchmedo.conf /etc/supervisor/conf.d/watchmedo.conf
-COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
-
-# >> setting up custom jupyter css and js
-COPY custom /home/$NB_USER/.jupyter/custom
 
 # > Jupyter Lab
 # >> Setting up custom jupyter lab settings
@@ -65,7 +46,33 @@ RUN rm -rf /home/$NB_USER/.cache/yarn
 RUN rm -rf /home/$NB_USER/.jupyter/lab/course_theme
 RUN npm cache clean --force
 
+
+# >> Config and processes
+# Change to root for creating log and config file locations
+USER root
+
+# >>> Folders for config and log files
+RUN mkdir /etc/supervisor
+RUN mkdir /etc/supervisor/conf.d
+RUN mkdir /var/log/supervisor
+RUN mkdir /var/run/supervisor
+# NB_USER write permissions for log and running files as supervisor being run by NB_USER
+RUN fix-permissions /var/log/supervisor
+RUN fix-permissions /var/run/supervisor
+
+# >>> Copying config files for supervisor and watchmedo
+COPY supervisord.conf /etc/supervisor/supervisord.conf
+COPY watchmedo.conf /etc/supervisor/conf.d/watchmedo.conf
+COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
+
+# >> setting up custom jupyter css and js
+COPY custom /home/$NB_USER/.jupyter/custom
+
+
 # > Custom Entrypoint
+
+USER $NB_USER
+
 COPY jupyter_supervisor_start.sh /usr/local/bin/jupyter_supervisor_start.sh
 
 RUN ln -s /home/data/Data /home/$NB_USER/Data && \

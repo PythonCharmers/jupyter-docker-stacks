@@ -69,7 +69,8 @@ RUN npm cache clean --force
 COPY jupyter_supervisor_start.sh /usr/local/bin/jupyter_supervisor_start.sh
 
 RUN ln -s /home/data/Data /home/$NB_USER/Data && \
-	ln -s /home/shared/trainer /home/$NB_USER/trainer
+	ln -s /home/shared/trainer /home/$NB_USER/trainer && \
+	ln -s /home/data/_Materials /home/$NB_USER/_Materials
 
 # New command for when container is executed
 # Overwrites CMD entry from base-notebook - only one CMD entry per container

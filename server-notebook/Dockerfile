@@ -68,6 +68,9 @@ RUN npm cache clean --force
 # > Custom Entrypoint
 COPY jupyter_supervisor_start.sh /usr/local/bin/jupyter_supervisor_start.sh
 
+RUN ln -s /home/data/Data /home/$NB_USER/Data && \
+	ln -s /home/shared/trainer /home/$NB_USER/trainer
+
 # New command for when container is executed
 # Overwrites CMD entry from base-notebook - only one CMD entry per container
 # Purpose is to include supervisord at start of image

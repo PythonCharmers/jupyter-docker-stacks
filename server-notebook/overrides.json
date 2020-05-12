@@ -1,0 +1,16 @@
+{
+	"@jupyterlab/apputils-extension:themes": {
+		"theme": "customtheme"
+	},
+	"@jupyterlab/docmanager-extension:plugin":{
+		"autosaveInterval": 5
+	},
+	"@jupyterlab/terminal-extension:plugin":{
+		"theme": "dark",
+		"lineHeight": 1.12,
+		"fontSize": 16
+	},
+	"@jupyterlab/extensionmanager-extension": {
+		"enabled": true
+	}
+}

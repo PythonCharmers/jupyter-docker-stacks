@@ -80,15 +80,15 @@ ENV JUPYTER_CONFIG_DIR=/etc/jupyter/
 # May need to be configured for kubernetes specific setup 
 # (with mounted and separate HOME dir)
 
-COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
-# COPY .watchdog_tricks.yml /tmp/.watchdog_tricks.yml
+# COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
+COPY .watchdog_tricks.yml /tmp/.watchdog_tricks.yml
 
 # Permissions may not need to be set here, as the symlink is simply read
 # Permissions should come from those on the target of the link
 # Done as root in case necessary for writing to / dir
-# RUN ln -s /home/data/Data /Data && \
-# 	ln -s /home/shared/trainer /trainer && \
-# 	ln -s /home/data/_Materials /_Materials
+RUN ln -s /home/data/Data /Data && \
+	ln -s /home/shared/trainer /trainer && \
+	ln -s /home/data/_Materials /_Materials
 
 
 # > Custom Entrypoint

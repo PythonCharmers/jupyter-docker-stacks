@@ -68,8 +68,6 @@ RUN fix-permissions /var/run/supervisor
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY watchmedo.conf /etc/supervisor/conf.d/watchmedo.conf
 
-COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
-
 # >> setting up custom jupyter css and js for original notebook
 # using this location as already used by scipy-notebook
 RUN mkdir -p /etc/jupyter/custom
@@ -77,6 +75,20 @@ COPY custom /etc/jupyter/custom
 RUN fix-permissions /etc/jupyter
 # Ensure /etc/jupyter is used as source of config
 ENV JUPYTER_CONFIG_DIR=/etc/jupyter/
+
+# >> Symlinks and watchmedo_tricks
+# May need to be configured for kubernetes specific setup 
+# (with mounted and separate HOME dir)
+
+COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
+# COPY .watchdog_tricks.yml /tmp/.watchdog_tricks.yml
+
+# Permissions may not need to be set here, as the symlink is simply read
+# Permissions should come from those on the target of the link
+# Done as root in case necessary for writing to / dir
+# RUN ln -s /home/data/Data /Data && \
+# 	ln -s /home/shared/trainer /trainer && \
+# 	ln -s /home/data/_Materials /_Materials
 
 
 # > Custom Entrypoint

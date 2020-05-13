@@ -96,6 +96,7 @@ RUN ln -s /home/data/Data /Data && \
 USER $NB_USER
 
 COPY jupyter_supervisor_start.sh /usr/local/bin/jupyter_supervisor_start.sh
+COPY postStart.sh /tmp/postStart.sh
 
 RUN ln -s /home/data/Data /home/$NB_USER/Data && \
 	ln -s /home/shared/trainer /home/$NB_USER/trainer && \

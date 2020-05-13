@@ -2,6 +2,9 @@
 FROM jupyter/scipy-notebook:e255f1aa00b2
 # FROM pythoncharmers/scipy-notebook:latest
 
+USER root
+RUN apt-get install daemonize
+
 USER $NB_UID
 
 # > Python Packaging

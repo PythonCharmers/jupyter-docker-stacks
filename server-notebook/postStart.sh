@@ -1,5 +1,20 @@
 
-#mv /tmp/.watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
-mv /tmp/.watchdog_tricks.yml ./
+cp /tmp/.watchdog_tricks.yml ./
 
+# Check if symlinks exist, if not, make them
+# Avoids errors for each restart of server with persistent volume as home
+# NOTE postStart hook runs in mounted/persistent home directory
+if [ ! -L ./Data ]; then
+	ln -s /home/data/Data ./Data
+fi
+
+if [ ! -L ./trainer ]; then
+	ln -s /home/shared/trainer ./trainer
+fi
+
+if [ ! -L ./_Materials ]; then
+	ln -s /home/data/_Materials ./_Materials
+fi
+
+# last, as will return exit code "1" when supervisord already running
 supervisord -c /etc/supervisor/supervisord.conf

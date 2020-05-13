@@ -75,6 +75,8 @@ COPY custom /etc/jupyter/custom
 RUN fix-permissions /etc/jupyter
 # Ensure /etc/jupyter is used as source of config
 ENV JUPYTER_CONFIG_DIR=/etc/jupyter/
+# Ensure that jupyterlab uses user settings in persistent home directory
+ENV JUPYTERLAB_SETTINGS_DIR=/home/$NB_USER/.jupyter/lab/user-settings
 
 # >> Symlinks and watchmedo_tricks
 # May need to be configured for kubernetes specific setup 

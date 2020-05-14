@@ -16,7 +16,6 @@ geoalchemy2
 graphviz
 httpie
 jellyfish
-jupyter_contrib_nbextensions
 karateclub
 keyring
 keyrings.cryptfile

@@ -9,18 +9,17 @@ RUN apt-get install daemonize
 USER $NB_USER
 # > Fixed Python Packaging
 
+
 # >> jupyter nbextension
 # Jupyter nbextension installation and acivation
 # Relies on jupyter_contrib_nbextensions installation
-RUN jupyter contrib nbextension install --user
-RUN jupyter nbextension enable varInspector/main
+RUN pip install jupyter_contrib_nbextensions && \
+        jupyter contrib nbextension install --user && \
+        jupyter nbextension enable varInspector/main
 
 # > Custom Tools
 # supplementary package - for controlled git pulling into images accross whole cluster
-RUN pip install --no-cache-dir nbgitpuller
-## Installing and Setting up supervisor and watchmedo
-RUN pip install --no-cache-dir supervisor
-RUN pip install --no-cache-dir watchdog[watchmedo]
+RUN pip install --no-cache-dir nbgitpuller supervisor watchdog[watchmedo]
 
 USER root
 

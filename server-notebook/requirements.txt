@@ -13,7 +13,6 @@ flask-restplus
 flask-sqlalchemy
 folium
 geoalchemy2
-graphviz
 httpie
 jellyfish
 karateclub

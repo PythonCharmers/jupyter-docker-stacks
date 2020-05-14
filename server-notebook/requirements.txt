@@ -4,11 +4,11 @@ black
 chardet
 click
 colorcet
+connexion
 dask
 descartes
 eli5
 flask
-flask-connexion
 flask-restplus
 flask-sqlalchemy
 folium

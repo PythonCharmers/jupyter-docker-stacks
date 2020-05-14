@@ -11,8 +11,8 @@ USER $NB_UID
 # > Python Packaging
 # Python packaging for workshops is controlled through requirements.txt file
 # Copy to image and use to install packages
-COPY requirements.txt /home/$NB_UID/requirements.txt
-RUN pip install --no-cache-dir -r /home/$NB_UID/requirements.txt
+COPY requirements.txt /home/$NB_USER/requirements.txt
+RUN pip install --no-cache-dir -r /home/$NB_USER/requirements.txt
 
 # >> jupyter nbextension
 # Jupyter nbextension installation and acivation
@@ -111,4 +111,6 @@ COPY postStart.sh /tmp/postStart.sh
 # New command for when container is executed
 # Overwrites CMD entry from base-notebook - only one CMD entry per container
 # Purpose is to include supervisord at start of image
-CMD ["jupyter_supervisor_start.sh"]
+
+# Now redundant with postStart.sh
+# CMD ["jupyter_supervisor_start.sh"]

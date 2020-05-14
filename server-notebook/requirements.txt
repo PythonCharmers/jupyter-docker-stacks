@@ -28,7 +28,7 @@ pillow
 pint
 plotly
 pydot
-pygraphviz
+# pygraphviz
 pyod
 pysal
 pytest

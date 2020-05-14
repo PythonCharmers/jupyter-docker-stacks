@@ -5,6 +5,7 @@ datashader
 fiona
 gdal
 geopandas
+graphviz
 mysql-connector-python
 netcdf4
 psycopg2

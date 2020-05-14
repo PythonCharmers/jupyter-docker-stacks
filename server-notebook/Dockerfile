@@ -6,13 +6,8 @@ USER root
 RUN apt-get update
 RUN apt-get install daemonize
 
-USER $NB_UID
-
-# > Python Packaging
-# Python packaging for workshops is controlled through requirements.txt file
-# Copy to image and use to install packages
-COPY requirements.txt /home/$NB_USER/requirements.txt
-RUN pip install --no-cache-dir -r /home/$NB_USER/requirements.txt
+USER $NB_USER
+# > Fixed Python Packaging
 
 # >> jupyter nbextension
 # Jupyter nbextension installation and acivation
@@ -83,7 +78,7 @@ ENV JUPYTER_CONFIG_DIR=/etc/jupyter/
 ENV JUPYTERLAB_SETTINGS_DIR=/home/$NB_USER/.jupyter/lab/user-settings
 
 # >> Symlinks and watchmedo_tricks
-# May need to be configured for kubernetes specific setup 
+# May need to be configured for kubernetes specific setup
 # (with mounted and separate HOME dir)
 
 # COPY .watchdog_tricks.yml /home/$NB_USER/.watchdog_tricks.yml
@@ -93,8 +88,8 @@ COPY .watchdog_tricks.yml /tmp/.watchdog_tricks.yml
 # Permissions should come from those on the target of the link
 # Done as root in case necessary for writing to / dir
 RUN ln -s /home/data/Data /Data && \
-	ln -s /home/shared/trainer /trainer && \
-	ln -s /home/data/_Materials /_Materials
+        ln -s /home/shared/trainer /trainer && \
+        ln -s /home/data/_Materials /_Materials
 
 
 # > Custom Entrypoint
@@ -114,3 +109,48 @@ COPY postStart.sh /tmp/postStart.sh
 
 # Now redundant with postStart.sh
 # CMD ["jupyter_supervisor_start.sh"]
+
+# > More random apt installs
+USER root
+
+# Install all OS dependencies for fully functional notebook server
+RUN apt-get update && apt-get install -yq --no-install-recommends \
+        vim-tiny \
+        less \
+        tree \
+        graphviz \
+        colordiff \
+        man \
+        silversearcher-ag \
+        jq \
+        && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+USER $NB_USER
+
+# > Setup keyring
+# keyring requires setup to run on a headless server (something to do with the way the user sessions are managed...). The work-around is a keyring extension and a manual config:
+
+COPY keyringrc.cfg /tmp/keyringrc.cfg
+
+# > Python Packaging
+# Python packaging for workshops is controlled through requirements.txt file
+# Copy to image and use to install packages
+
+# >> Conda installs
+# We need conda to install some stuff becuase of weirdness with packaging
+# because we're using conda
+
+COPY conda_requirements.txt /tmp/conda_requirements.txt
+RUN conda install --quiet --yes \
+    --file /tmp/conda_requirements.txt && \
+    conda clean --all -f -y && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+
+# >> pip installs
+# These come last since they have less (so much less) in the way of
+# side effects
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt

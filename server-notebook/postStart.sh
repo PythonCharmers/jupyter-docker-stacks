@@ -8,11 +8,11 @@ if [ ! -L ./Data ]; then
 fi
 
 if [ ! -L ./trainer ]; then
-        ln -s /home/shared/trainer ./trainer
+        ln -s /home/shared/trainer ./Trainer
 fi
 
 if [ ! -L ./_Materials ]; then
-        ln -s /home/data/_Materials ./_Materials
+        ln -s /home/data/_Materials ./Materials
 fi
 
 # make the location for keyringrc.cfg
@@ -24,3 +24,6 @@ cp /tmp/.bashrc ./
 
 # last, as will return exit code "1" when supervisord already running
 supervisord -c /etc/supervisor/supervisord.conf
+
+# remove lost+found folder
+rm -Rf $NB_USER/lost+found

@@ -27,3 +27,7 @@ supervisord -c /etc/supervisor/supervisord.conf
 
 # remove lost+found folder
 rm -Rf $NB_USER/lost+found
+
+# make Data and _Materials read-only (easy to bypass but prevents
+# accidental modifications)
+chmod u-w $NB_USER/data/Data $NB_USER/data/_Materials

@@ -1,4 +1,3 @@
-cartopy
 coverage
 dask-ml
 datashader
@@ -7,7 +6,6 @@ gdal
 geopandas
 graphviz
 keras
-mysql-connector-python
 netcdf4
 psycopg2
 pyodbc

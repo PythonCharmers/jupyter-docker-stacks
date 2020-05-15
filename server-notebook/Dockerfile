@@ -119,6 +119,11 @@ COPY postStart.sh /tmp/postStart.sh
 # > More random apt installs
 USER root
 
+# Try setting both root and user passwords.
+# Use underscores instead of spaces for now ...
+RUN echo 'root:dainty_grey_flag_hooks' | chpasswd
+RUN echo $NB_USER:'dainty_grey_flag_hooks' | chpasswd
+
 # Install all OS dependencies for fully functional notebook server
 RUN apt-get update && apt-get install -yq --no-install-recommends \
         vim-nox \
@@ -129,6 +134,9 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
         silversearcher-ag \
         jq \
         psmisc \
+        zip \
+        screen \
+        tmux \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # > Install ngrok

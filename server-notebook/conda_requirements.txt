@@ -1,3 +1,5 @@
+cartopy
+dask-ml
 coverage
 dask-ml
 datashader
@@ -5,19 +7,17 @@ fiona
 gdal
 geopandas
 graphviz
-keras
+mysql-connector-python
 netcdf4
 psycopg2
 pyodbc
 pyproj
 pytables
-pytorch
 rasterio
 rpy2
+rtree
 scikit-image
 scikit-learn
 shapely
-tensorflow
 xarray
 xgboost
-xlutils

@@ -72,3 +72,4 @@ vega-datasets
 voila
 wikipedia
 yellowbrick
+xlutils

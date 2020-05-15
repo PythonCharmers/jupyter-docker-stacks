@@ -128,6 +128,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
         colordiff \
         silversearcher-ag \
         jq \
+        psmisc \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # > Install ngrok

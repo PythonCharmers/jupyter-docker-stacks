@@ -119,7 +119,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
         tree \
         graphviz \
         colordiff \
-        man \
         silversearcher-ag \
         jq \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -157,4 +156,3 @@ RUN conda install --quiet --yes \
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
-

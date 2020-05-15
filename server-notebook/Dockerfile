@@ -124,6 +124,10 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
         jq \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# > Install ngrok
+RUN wget -O /tmp/ngrok_install.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && \
+    unzip /tmp/ngrok_install.zip -d /usr/local/bin
+
 USER $NB_USER
 
 # > Setup keyring
@@ -153,3 +157,4 @@ RUN conda install --quiet --yes \
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
+

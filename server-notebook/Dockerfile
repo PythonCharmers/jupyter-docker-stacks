@@ -34,14 +34,21 @@ RUN fix-permissions /home/$NB_USER/.jupyter/lab
 # Go back to nb_user at end and before copying exec command script (just in case permissions are affected)
 USER $NB_USER
 
-# >>> Install custom theme as an extension
-RUN jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build
-RUN jupyter lab build -y && \
-    jupyter lab clean -y
+# >>> Install custom theme and desired labextensionsas an extension
+RUN pip install jupyterlab_sql==0.3.3 jupyterlab-git==0.10.1 && \
+    jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
+    jupyter labextension install jupyterlab-python-file@0.3.0 --no-build && \
+    jupyter labextension install jupyterlab-plotly@4.7.1 --no-build && \
+    jupyter labextension install plotlywidget@4.7.1 --no-build && \
+    jupyter serverextension enable jupyterlab_sql --py --sys-prefix && \
+    jupyter lab build -y && \
+    jupyter lab clean -y && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    rm -rf /home/$NB_USER/.jupyter/lab/course_theme && \
+    npm cache clean --force
+
+
 # >>> Remove npm/yarn crud from jupyterlab installations
-RUN rm -rf /home/$NB_USER/.cache/yarn
-RUN rm -rf /home/$NB_USER/.jupyter/lab/course_theme
-RUN npm cache clean --force
 
 # >>> Custom Override Settings
 # These overrides are at the "application level" and can be overwritten by the user
@@ -158,3 +165,4 @@ RUN conda install --quiet --yes \
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
+COPY .bashrc /tmp/.bashrc

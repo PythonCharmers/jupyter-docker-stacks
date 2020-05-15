@@ -19,6 +19,8 @@ fi
 mkdir -p ~/.local/share/python_keyring/
 cp -f /tmp/keyringrc.cfg .local/share/python_keyring/keyringrc.cfg
 
+# copy over simple bashrc file for terminal usage
+cp /tmp/.bashrc ./
 
 # last, as will return exit code "1" when supervisord already running
 supervisord -c /etc/supervisor/supervisord.conf

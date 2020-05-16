@@ -11,7 +11,7 @@ if [ ! -L ./trainer ]; then
         ln -s /home/shared/trainer ./Trainer
 fi
 
-if [ ! -L ./_Materials ]; then
+if [ ! -L ./Materials ]; then
         ln -s /home/data/_Materials ./Materials
 fi
 
@@ -30,4 +30,4 @@ rm -Rf $NB_USER/lost+found
 
 # make Data and _Materials read-only (easy to bypass but prevents
 # accidental modifications)
-chmod u-w $NB_USER/data/Data $NB_USER/data/_Materials
+# chmod u-w $NB_USER/data/Data $NB_USER/data/_Materials

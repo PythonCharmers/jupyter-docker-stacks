@@ -13,7 +13,6 @@
     "@jupyterlab/extensionmanager-extension:plugin": {
         "enabled": true
     },
-    {
         "@jupyterlab/shortcuts-extension:shortcuts": {
             "shortcuts": [
                 {
@@ -33,5 +32,4 @@
                 }
             ]
         }
-    }
 }

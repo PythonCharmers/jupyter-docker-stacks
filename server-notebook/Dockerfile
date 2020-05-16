@@ -123,7 +123,9 @@ USER root
 # Use underscores instead of spaces for now ...
 RUN echo 'root:dainty_grey_flag_hooks' | chpasswd
 RUN echo $NB_USER:'dainty_grey_flag_hooks' | chpasswd
-
+# Necessary to add sudo group to sudoers and add NB_USER to sudo group
+RUN echo "%sudo ALL=(ALL:ALL) ALL" > /etc/sudoers.d/pythoncharmers && \
+    usermod -aG sudo $NB_USER
 # Install all OS dependencies for fully functional notebook server
 RUN apt-get update && apt-get install -yq --no-install-recommends \
         vim-nox \

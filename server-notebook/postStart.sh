@@ -7,7 +7,7 @@ if [ ! -L ./Data ]; then
         ln -s /home/data/Data ./Data
 fi
 
-if [ ! -L ./trainer ]; then
+if [ ! -L ./Trainer ]; then
         ln -s /home/shared/trainer ./Trainer
 fi
 
@@ -20,10 +20,7 @@ mkdir -p ~/.local/share/python_keyring/
 cp -f /tmp/keyringrc.cfg .local/share/python_keyring/keyringrc.cfg
 
 # copy over simple bashrc file for terminal usage
-cp /tmp/.bashrc ./
-
-# last, as will return exit code "1" when supervisord already running
-supervisord -c /etc/supervisor/supervisord.conf
+cp -f /tmp/.bashrc ./
 
 # remove lost+found folder
 rm -Rf $NB_USER/lost+found
@@ -31,3 +28,6 @@ rm -Rf $NB_USER/lost+found
 # make Data and _Materials read-only (easy to bypass but prevents
 # accidental modifications)
 # chmod u-w $NB_USER/data/Data $NB_USER/data/_Materials
+
+# last, as will return exit code "1" when supervisord already running
+supervisord -c /etc/supervisor/supervisord.conf

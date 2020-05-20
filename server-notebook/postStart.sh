@@ -1,11 +1,3 @@
-# Set up the users home directory on the shared drive
-mkdir -p /home/shared/${JUPYTERHUB_USER}
-fix-permissions /home/shared/${JUPYTERHUB_USER}
-
-mount -o bind /home/shared/${JUPYTERHUB_USER} /home/jovyan
-fix-permissions /home/jovyan
-
-
 # Check if symlinks exist, if not, make them
 # Avoids errors for each restart of server with persistent volume as home
 # NOTE postStart hook runs in mounted/persistent home directory
@@ -13,25 +5,25 @@ fix-permissions /home/jovyan
 if [ ! -L ./Data ]; then
         ln -s /home/data/Data ./Data
 fi
-if [ ! -L /Data ]; then
-        ln -s /home/data/Data /Data
-fi
+# if [ ! -L /Data ]; then
+#         ln -s /home/data/Data /Data
+# fi
 
 ## >> Materials
 if [ ! -L ./Materials ]; then
         ln -s /home/data/Materials ./Materials
 fi
-if [ ! -L /Materials ]; then
-        ln -s /home/data/Materials /Materials
-fi
+# if [ ! -L /Materials ]; then
+#         ln -s /home/data/Materials /Materials
+# fi
 
 ## >> Trainer
 if [ ! -L ./Trainer ]; then
         ln -s /home/shared/trainer ./Trainer
 fi
-if [ ! -L /Trainer ]; then
-        ln -s /home/shared/trainer /Trainer
-fi
+# if [ ! -L /Trainer ]; then
+#         ln -s /home/shared/trainer /Trainer
+# fi
 
 
 # > make the location for keyringrc.cfg

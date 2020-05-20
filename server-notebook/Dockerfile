@@ -172,3 +172,9 @@ COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 COPY .bashrc /tmp/.bashrc
+
+USER root
+RUN groupadd -g 2000 shared && \
+    groupadd -g 2001 data
+
+USER $NB_USER

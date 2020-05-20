@@ -7,7 +7,7 @@ black
 chardet
 click
 colorcet
-connexion
+connexion[swagger-ui]
 correct_horse
 coverage
 cx_oracle
@@ -15,12 +15,15 @@ dash
 dask
 descartes
 eli5
+email_validator
 fabric
 fastapi
 flake8
 flask
 flask-apscheduler
+flask-httpauth
 flask-restplus
+flask-security-too
 flask-sqlalchemy
 folium
 geoalchemy2
@@ -38,6 +41,7 @@ jellyfish
 karateclub
 keyring
 keyrings.cryptfile
+littleballoffur
 logzero
 marshmallow
 marshmallow-sqlalchemy

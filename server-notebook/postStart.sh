@@ -39,6 +39,10 @@ cp /tmp/.watchdog_tricks.yml ./   # everyone to run their own conversions
 
 # > extras from /home/shared/postStart.sh
 if [ -f /home/shared/postStart.sh ]; then
-   source /home/shared/postStart.sh
-   echo "ran shared poststart from ${JUPYTERHUB_USER}" >> /home/shared/start_logs.log
+    {
+        exec /home/shared/postStart.sh
+        echo "$(date) - ran shared poststart from ${JUPYTERHUB_USER}" >> /home/shared/start_logs.log
+    } || {
+        echo "$(date) - ERROR failed to run shared poststart from ${JUPYTERHUB_USER}" >> /home/shared/start_logs.log
+    }
 fi

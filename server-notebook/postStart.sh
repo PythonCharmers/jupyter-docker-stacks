@@ -39,3 +39,6 @@ fi
 
 # Make Data and Materials read-only for users
 chmod -f a-w /home/data/Data /home/data/Materials /home/data/materials.pdf
+
+# Make Trainer folder read-only for users
+chmod -f a-w /home/shared/trainer

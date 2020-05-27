@@ -6,16 +6,6 @@ if [ ! -L ./Data ]; then
         ln -s /home/data/Data ./Data
 fi
 
-## >> Materials
-if [ ! -L ./Materials ]; then
-        ln -s /home/data/Materials ./Materials
-fi
-
-## >> Trainer
-if [ ! -L ./Trainer ]; then
-        ln -s /home/shared/trainer ./Trainer
-fi
-
 # > make the location for keyringrc.cfg
 mkdir -p ~/.local/share/python_keyring/
 cp -f /tmp/keyringrc.cfg .local/share/python_keyring/keyringrc.cfg

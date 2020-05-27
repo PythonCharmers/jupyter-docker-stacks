@@ -136,8 +136,10 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
         highlight \
         build-essential \
         rsync \
-        fd-find \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# >> fd-find isn't a core package until 19.04, so we use dpkg to install it:
+RUN dpkg -i fd_8.1.0_amd64.deb
 
 # > Install ngrok
 RUN wget -O /tmp/ngrok_install.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && \

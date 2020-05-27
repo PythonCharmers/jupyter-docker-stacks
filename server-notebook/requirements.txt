@@ -17,6 +17,7 @@ descartes
 eli5
 email_validator
 fabric
+faker
 fastapi
 flake8
 flask
@@ -41,6 +42,7 @@ jellyfish
 karateclub
 keyring
 keyrings.cryptfile
+ldap3
 littleballoffur
 logzero
 marshmallow
@@ -61,6 +63,7 @@ pylint
 pymongo
 pyod
 pysal
+pytesseract
 pytest
 pytest-cov
 redis
@@ -72,8 +75,9 @@ sh
 teradata
 teradatasql
 textdistance
+tika
 vega-datasets
 voila
 wikipedia
-yellowbrick
 xlutils
+yellowbrick

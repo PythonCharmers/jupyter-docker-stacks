@@ -8,6 +8,7 @@ chardet
 click
 colorcet
 connexion[swagger-ui]
+cookiecutter
 correct_horse
 coverage
 cx_oracle

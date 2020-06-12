@@ -136,6 +136,16 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
         highlight \
         build-essential \
         rsync \
+        openssh-client \
+        openssh-server \
+        tshark \
+        cmake \
+        file \
+        tcpdump \
+        libpcap-dev \
+        psmisc \
+        net-tools \
+        telnet \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # >> fd-find isn't a core package until 19.04, so we use dpkg to install it:

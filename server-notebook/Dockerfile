@@ -203,3 +203,9 @@ RUN pip install jupyterlab-git && \
      rm -rf /home/$NB_USER/.jupyter/lab/course_theme && \
      npm cache clean --force
 
+# At the end for speed of testing / debugging:
+# Takes forever:
+# RUN conda install pytorch torchvision cpuonly -c pytorch
+# Faster:
+RUN pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
+

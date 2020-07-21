@@ -193,7 +193,7 @@ RUN groupadd -g 2000 shared && \
 
 USER $NB_USER
 
-RUN pip jupyterlab-git && \
+RUN pip install jupyterlab-git && \
      jupyter labextension install jupyterlab-plotly --no-build && \
      jupyter labextension install plotlywidget --no-build && \
      jupyter lab build -y && \

@@ -52,6 +52,7 @@ mysql-connector-python
 nb_black
 nbconvert
 networkx
+openpyxl
 passlib
 pillow
 pint

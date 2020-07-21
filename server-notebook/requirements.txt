@@ -73,6 +73,7 @@ rtree
 scapy
 scrapy
 sh
+tensorflow
 teradata
 teradatasql
 textdistance

@@ -94,8 +94,6 @@ COPY .watchdog_tricks.yml /tmp/.watchdog_tricks.yml
 # Permissions should come from those on the target of the link
 # Done as root in case necessary for writing to / dir
 RUN ln -s /home/data/Data /Data && \
-        ln -s /home/shared/trainer /Trainer && \
-        ln -s /home/data/Materials /Materials && \
         ln -s /home/$NB_USER /Work
 
 

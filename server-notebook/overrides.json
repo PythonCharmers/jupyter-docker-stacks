@@ -1,7 +1,4 @@
 {
-    "@jupyterlab/apputils-extension:themes": {
-        "theme": "customtheme"
-    },
     "@jupyterlab/docmanager-extension:plugin":{
         "autosaveInterval": 5
     },

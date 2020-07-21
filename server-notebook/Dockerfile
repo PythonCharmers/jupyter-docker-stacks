@@ -27,7 +27,7 @@ USER root
 # > Jupyter Lab
 
 # >> Custom Theme
-COPY customtheme/ /home/$NB_USER/.jupyter/lab/course_theme
+COPY charmerstheme/ /home/$NB_USER/.jupyter/lab/course_theme
 # Allow user to change their settings
 RUN fix-permissions /home/$NB_USER/.jupyter/lab
 
@@ -194,6 +194,7 @@ RUN groupadd -g 2000 shared && \
 USER $NB_USER
 
 RUN pip install jupyterlab-git && \
+#     jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
      jupyter labextension install jupyterlab-plotly --no-build && \
      jupyter labextension install plotlywidget --no-build && \
      jupyter lab build -y && \

@@ -1,5 +1,6 @@
 # Build of jupyter/scipy-notebook from before jupyterlab was bumped up to v2
-FROM jupyter/scipy-notebook:e255f1aa00b2
+FROM jupyter/tensorflow-notebook:b90cce83f37b
+#FROM jupyter/scipy-notebook:e255f1aa00b2
 # FROM pythoncharmers/scipy-notebook:latest
 
 USER root
@@ -35,17 +36,17 @@ RUN fix-permissions /home/$NB_USER/.jupyter/lab
 USER $NB_USER
 
 # >>> Install custom theme and desired labextensionsas an extension
-RUN pip install jupyterlab_sql==0.3.3 jupyterlab-git==0.10.1 && \
-    jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
-    jupyter labextension install jupyterlab-python-file@0.3.0 --no-build && \
-    jupyter labextension install jupyterlab-plotly@4.7.1 --no-build && \
-    jupyter labextension install plotlywidget@4.7.1 --no-build && \
-    jupyter serverextension enable jupyterlab_sql --py --sys-prefix && \
-    jupyter lab build -y && \
-    jupyter lab clean -y && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
-    rm -rf /home/$NB_USER/.jupyter/lab/course_theme && \
-    npm cache clean --force
+# RUN pip install jupyterlab_sql==0.3.3 jupyterlab-git==0.10.1 && \
+#     jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
+#     jupyter labextension install jupyterlab-python-file@0.3.0 --no-build && \
+#     jupyter labextension install jupyterlab-plotly@4.7.1 --no-build && \
+#     jupyter labextension install plotlywidget@4.7.1 --no-build && \
+#     jupyter serverextension enable jupyterlab_sql --py --sys-prefix && \
+#     jupyter lab build -y && \
+#     jupyter lab clean -y && \
+#     rm -rf /home/$NB_USER/.cache/yarn && \
+#     rm -rf /home/$NB_USER/.jupyter/lab/course_theme && \
+#     npm cache clean --force
 
 
 # >>> Remove npm/yarn crud from jupyterlab installations
@@ -191,3 +192,13 @@ RUN groupadd -g 2000 shared && \
     groupadd -g 2001 data
 
 USER $NB_USER
+
+RUN pip jupyterlab-git && \
+     jupyter labextension install jupyterlab-plotly --no-build && \
+     jupyter labextension install plotlywidget --no-build && \
+     jupyter lab build -y && \
+     jupyter lab clean -y && \
+     rm -rf /home/$NB_USER/.cache/yarn && \
+     rm -rf /home/$NB_USER/.jupyter/lab/course_theme && \
+     npm cache clean --force
+

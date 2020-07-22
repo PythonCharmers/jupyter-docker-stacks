@@ -175,6 +175,17 @@ RUN conda install --quiet --yes \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
+# >> Conda-forge installs
+COPY conda_forge_requirements.txt /tmp/conda_forge_requirements.txt
+RUN conda install --yes \
+    --channel conda-forge \
+    --file /tmp/conda_forge_requirements.txt && \
+    conda clean --all -f -y && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+
+
 
 # >> pip installs
 # These come last since they have less (so much less) in the way of
@@ -201,16 +212,8 @@ RUN pip install jupyterlab-git && \
      rm -rf /home/$NB_USER/.jupyter/lab/course_theme && \
      npm cache clean --force
 
-# At the end for speed of testing / debugging:
-# Takes forever:
-# RUN conda install pytorch torchvision cpuonly -c pytorch
-# Faster:
+# PyTorch, CPU-only:
 RUN pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
-
-RUN conda install -c conda-forge ipopt --yes && \
-    conda install -c conda-forge coincbc --yes && \
-    conda install -c conda-forge glpk --yes
-
 
 RUN pip cache purge && \
     fix-permissions "${CONDA_DIR}" && \

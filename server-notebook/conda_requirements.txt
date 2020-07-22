@@ -21,3 +21,6 @@ scikit-learn
 shapely
 xarray
 xgboost
+ipopt
+coincbc
+glpk

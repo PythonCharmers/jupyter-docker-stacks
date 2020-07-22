@@ -1,7 +1,5 @@
 # Build of jupyter/pyspark-notebook from 2020-07-22:
 FROM jupyter/pyspark-notebook:b90cce83f37b
-#FROM jupyter/scipy-notebook:e255f1aa00b2
-# FROM pythoncharmers/scipy-notebook:latest
 
 USER root
 RUN apt-get update
@@ -209,6 +207,11 @@ RUN pip install jupyterlab-git && \
 # Faster:
 RUN pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
 
-USER root
-fix-permissions "${CONDA_DIR}" && \
-fix-permissions "/home/${NB_USER}"
+RUN conda install -c conda-forge ipopt --yes && \
+    conda install -c conda-forge coincbc --yes && \
+    conda install -c conda-forge glpk --yes
+
+
+RUN pip cache purge && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"

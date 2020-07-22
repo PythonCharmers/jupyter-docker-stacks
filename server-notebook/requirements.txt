@@ -4,6 +4,8 @@ arrow
 bcrypt
 beautifulsoup4
 black
+blaze
+cassandra-driver
 chardet
 click
 colorcet
@@ -20,6 +22,7 @@ email_validator
 fabric
 faker
 fastapi
+faust
 flake8
 flask
 flask-apscheduler
@@ -41,8 +44,10 @@ ipytest
 itsdangerous
 jellyfish
 karateclub
+kerberos
 keyring
 keyrings.cryptfile
+koalas
 ldap3
 littleballoffur
 logzero
@@ -52,15 +57,18 @@ mysql-connector-python
 nb_black
 nbconvert
 networkx
+odo
 openpyxl
 passlib
 pillow
 pint
 plotly
 psutil
+pyarrow
 pycodestyle
 pydantic-sqlalchemy
 pydot
+pyhive
 pylint
 pymongo
 pyod
@@ -74,7 +82,7 @@ rtree
 scapy
 scrapy
 sh
-tensorflow
+tensorflow==2.2.0
 teradata
 teradatasql
 textdistance

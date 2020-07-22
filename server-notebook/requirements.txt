@@ -13,6 +13,7 @@ connexion[swagger-ui]
 cookiecutter
 correct_horse
 coverage
+cvxopt
 cx_oracle
 dash
 dask
@@ -31,6 +32,7 @@ flask-restplus
 flask-security-too
 flask-sqlalchemy
 folium
+gekko
 geoalchemy2
 graphviz
 h5py
@@ -54,11 +56,13 @@ logzero
 marshmallow
 marshmallow-sqlalchemy
 mysql-connector-python
+mystic
 nb_black
 nbconvert
 networkx
 odo
 openpyxl
+ortools
 passlib
 pillow
 pint
@@ -72,6 +76,7 @@ pyhive
 pylint
 pymongo
 pyod
+pyomo
 pysal
 pytesseract
 pytest

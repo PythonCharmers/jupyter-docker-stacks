@@ -83,6 +83,7 @@ pysal
 pytesseract
 pytest
 pytest-cov
+QuantLib
 redis
 requests
 rtree
@@ -101,3 +102,4 @@ wikipedia
 xlutils
 wordcloud
 yellowbrick
+zarr

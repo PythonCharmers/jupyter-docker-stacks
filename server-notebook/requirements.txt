@@ -92,6 +92,7 @@ tensorflow==2.2.0
 teradata
 teradatasql
 textdistance
+textract
 tika
 vega-datasets
 voila

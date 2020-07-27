@@ -99,4 +99,5 @@ vega-datasets
 voila
 wikipedia
 xlutils
+wordcloud
 yellowbrick

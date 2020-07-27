@@ -60,7 +60,6 @@ mystic
 nb_black
 nbconvert
 networkx
-odo
 openml
 openpyxl
 ortools

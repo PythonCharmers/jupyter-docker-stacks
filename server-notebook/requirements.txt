@@ -64,6 +64,7 @@ odo
 openpyxl
 ortools
 passlib
+pdf2image
 pillow
 pint
 plotly

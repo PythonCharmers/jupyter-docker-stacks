@@ -159,6 +159,11 @@ USER $NB_USER
 
 COPY keyringrc.cfg /tmp/keyringrc.cfg
 
+# > Get the tika jar
+RUN wget -O /tmp/tika-server.jar https://repo1.maven.org/maven2/org/apache/tika/tika-server/1.24.1/tika-server-1.24.1.jar
+RUN wget -O /tmp/tika-server.jar.md5 https://repo1.maven.org/maven2/org/apache/tika/tika-server/1.24.1/tika-server-1.24.1.jar.md5
+
+
 # > Python Packaging
 # Python packaging for workshops is controlled through requirements.txt file
 # Copy to image and use to install packages
@@ -182,9 +187,6 @@ RUN conda install --yes \
     conda clean --all -f -y && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
-
-
-
 
 # >> pip installs
 # These come last since they have less (so much less) in the way of

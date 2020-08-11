@@ -145,11 +145,8 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
         telnet \
         tesseract-ocr \
         imagemagick \
+        fd-find \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# >> fd-find isn't a core package until 19.04, so we use dpkg to install it:
-RUN wget -O /tmp/fd-musl_8.1.1_amd64.deb https://github.com/sharkdp/fd/releases/download/v8.1.1/fd-musl_8.1.1_amd64.deb
-RUN dpkg -i /tmp/fd-musl_8.1.1_amd64.deb
 
 # > Install ngrok
 RUN wget -O /tmp/ngrok_install.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && \
@@ -161,6 +158,11 @@ USER $NB_USER
 # keyring requires setup to run on a headless server (something to do with the way the user sessions are managed...). The work-around is a keyring extension and a manual config:
 
 COPY keyringrc.cfg /tmp/keyringrc.cfg
+
+# > Get the tika jar
+RUN wget -O /tmp/tika-server.jar https://repo1.maven.org/maven2/org/apache/tika/tika-server/1.24.1/tika-server-1.24.1.jar
+RUN wget -O /tmp/tika-server.jar.md5 https://repo1.maven.org/maven2/org/apache/tika/tika-server/1.24.1/tika-server-1.24.1.jar.md5
+
 
 # > Python Packaging
 # Python packaging for workshops is controlled through requirements.txt file
@@ -185,9 +187,6 @@ RUN conda install --yes \
     conda clean --all -f -y && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
-
-
-
 
 # >> pip installs
 # These come last since they have less (so much less) in the way of

@@ -193,7 +193,7 @@ COPY conda_forge_requirements.txt /tmp/conda_forge_requirements.txt
 RUN conda install --yes \
     --channel conda-forge \
     --file /tmp/conda_forge_requirements.txt && \
-    conda clean --all -f -y && \
+    conda clean --all -f -y
 
 # >> pip installs
 # These come last since they have less (so much less) in the way of

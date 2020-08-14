@@ -57,6 +57,18 @@ USER root
 RUN mkdir -p /opt/conda/share/jupyter/lab/settings
 COPY overrides.json /opt/conda/share/jupyter/lab/settings/
 
+# >>> Custom Jupyter Lab User Settings
+# Where the overrides.json does not work (for shortcut keys for instance) ...
+# These user settings  from lab_user_settings are being supplanted into the settings dir
+# Note that overrides.json takes precedence over these settings below.
+# Does potentially create conflicts/redudance that should be cleaned up
+RUN mkdir -p /home/$NB_USER/.jupyter/lab/user-settings/'@jupyterlab'
+COPY lab_user_settings/ /home/$NB_USER/.jupyter/lab/user-settings/'@jupyterlab'
+
+# Ensure that jupyterlab uses user settings in persistent home directory
+ENV JUPYTERLAB_SETTINGS_DIR=/home/$NB_USER/.jupyter/lab/user-settings
+
+
 # > Config and processes
 
 # >> Folders for config and log files
@@ -79,8 +91,6 @@ COPY custom /etc/jupyter/custom
 RUN fix-permissions /etc/jupyter
 # Ensure /etc/jupyter is used as source of config
 ENV JUPYTER_CONFIG_DIR=/etc/jupyter/
-# Ensure that jupyterlab uses user settings in persistent home directory
-ENV JUPYTERLAB_SETTINGS_DIR=/home/$NB_USER/.jupyter/lab/user-settings
 
 # >> Symlinks and watchmedo_tricks
 # May need to be configured for kubernetes specific setup

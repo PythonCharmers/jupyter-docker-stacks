@@ -67,7 +67,8 @@ COPY lab_user_settings/ /home/$NB_USER/.jupyter/lab/user-settings/'@jupyterlab'
 
 # Ensure that jupyterlab uses user settings in persistent home directory
 ENV JUPYTERLAB_SETTINGS_DIR=/home/$NB_USER/.jupyter/lab/user-settings
-
+# allow user settings to be changed by user!
+RUN fix-permissions /home/$NB_USER/.jupyter/lab
 
 # > Config and processes
 
@@ -185,9 +186,7 @@ RUN wget -O /tmp/tika-server.jar.md5 https://repo1.maven.org/maven2/org/apache/t
 COPY conda_requirements.txt /tmp/conda_requirements.txt
 RUN conda install --quiet --yes \
     --file /tmp/conda_requirements.txt && \
-    conda clean --all -f -y && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+    conda clean --all -f -y
 
 # >> Conda-forge installs
 COPY conda_forge_requirements.txt /tmp/conda_forge_requirements.txt
@@ -195,8 +194,6 @@ RUN conda install --yes \
     --channel conda-forge \
     --file /tmp/conda_forge_requirements.txt && \
     conda clean --all -f -y && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
 
 # >> pip installs
 # These come last since they have less (so much less) in the way of
@@ -209,7 +206,11 @@ COPY .bashrc /tmp/.bashrc
 
 USER root
 RUN groupadd -g 2000 shared && \
-    groupadd -g 2001 data
+    groupadd -g 2001 data && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+
 
 USER $NB_USER
 
@@ -228,6 +229,8 @@ RUN pip install jupyterlab-git && \
 # PyTorch, CPU-only:
 RUN pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
 
-RUN pip cache purge && \
-    fix-permissions "${CONDA_DIR}" && \
+RUN pip cache purge
+
+USER root
+RUN fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"

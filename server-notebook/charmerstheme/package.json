@@ -1,7 +1,7 @@
 {
-  "name": "@myorg/charmerstheme",
+  "name": "@pythoncharmers/charmerstheme",
   "version": "0.1.0",
-  "description": "custom theme for courses",
+  "description": "custom theme for course delivery",
   "author": "pythoncharmers",
   "keywords": [
     "jupyter",

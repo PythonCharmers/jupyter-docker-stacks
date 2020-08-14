@@ -1,6 +1,6 @@
-# myorg/charmerstheme
+# pythoncharmers/charmerstheme
 
-custom theme for courses
+custom theme for course delivery
 
 ## Prerequisites
 
@@ -9,7 +9,7 @@ custom theme for courses
 ## Installation
 
 ```bash
-jupyter labextension install myorg/charmerstheme
+jupyter labextension install pythoncharmers/charmerstheme
 ```
 
 ## Development

@@ -204,10 +204,12 @@ RUN groupadd -g 2000 shared && \
 USER $NB_USER
 
 RUN pip install jupyterlab-git && \
-#     jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
+    jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
      jupyter labextension install jupyterlab-plotly --no-build && \
      jupyter labextension install plotlywidget --no-build && \
-     jupyter lab build -y && \
+     # dev-build=False should prevent massive JS payload
+     # necessary, as True by default when local extension is installed
+     jupyter lab build -y --dev-build=False && \
      jupyter lab clean -y && \
      rm -rf /home/$NB_USER/.cache/yarn && \
      rm -rf /home/$NB_USER/.jupyter/lab/course_theme && \

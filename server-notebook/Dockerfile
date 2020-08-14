@@ -234,3 +234,5 @@ RUN pip cache purge
 USER root
 RUN fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
+
+USER $NB_USER

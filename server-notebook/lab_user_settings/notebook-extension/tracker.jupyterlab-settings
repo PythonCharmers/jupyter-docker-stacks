@@ -3,4 +3,5 @@
     // The configuration for all code cells.
     "codeCellConfig": {
         "autoClosingBrackets": false
+	}
 }

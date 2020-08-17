@@ -214,6 +214,11 @@ RUN groupadd -g 2000 shared && \
 
 USER $NB_USER
 
+# For testing the image
+COPY ./Testing imports.ipynb /tmp/Testing_imports.ipynb
+# For testing outside of the hub
+COPY ./AAPL.h5 /tmp/AAPL.h5
+
 RUN pip install jupyterlab-git && \
     jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
      jupyter labextension install jupyterlab-plotly --no-build && \

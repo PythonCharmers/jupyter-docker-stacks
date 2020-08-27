@@ -60,10 +60,10 @@ COPY overrides.json /opt/conda/share/jupyter/lab/settings/
 # >>> Custom Jupyter Lab User Settings
 # Where the overrides.json does not work (for shortcut keys for instance) ...
 # These user settings  from lab_user_settings are being supplanted into the settings dir
-# Note that overrides.json takes precedence over these settings below.
 # Does potentially create conflicts/redudance that should be cleaned up
-RUN mkdir -p /home/$NB_USER/.jupyter/lab/user-settings/'@jupyterlab'
-COPY lab_user_settings/ /home/$NB_USER/.jupyter/lab/user-settings/'@jupyterlab'
+# Copied to /tmp to copied into home later (by pre or post start script)
+RUN mkdir -p /tmp/.jupyter/lab/user-settings/'@jupyterlab'
+COPY lab_user_settings/ /tmp/.jupyter/lab/user-settings/'@jupyterlab'
 
 # Ensure that jupyterlab uses user settings in persistent home directory
 ENV JUPYTERLAB_SETTINGS_DIR=/home/$NB_USER/.jupyter/lab/user-settings

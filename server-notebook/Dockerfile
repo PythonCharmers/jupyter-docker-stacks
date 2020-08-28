@@ -234,9 +234,30 @@ RUN pip install jupyterlab-git && \
 # PyTorch, CPU-only:
 RUN pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
 
+
+# tableau install
+RUN pip install pandleau tableauserverclient
+RUN cd /tmp && \
+    wget https://downloads.tableau.com/tssoftware/extractapi-py-linux-x86_64-2019-2-6.tar.gz && \
+    tar xf extractapi-py-linux-x86_64-2019-2-6.tar.gz && \
+    find . -maxdepth 1 -iname 'hyperextractapi*' -type d | awk 'NR==1' | xargs -I d pip install d
+    
 RUN pip cache purge
 
 USER root
+
+# to work around a sudo bug in containers for the install below
+RUN echo "Set disable_coredump false" >> /etc/sudo.conf
+
+# install binaries necessary for tableau export and ubuntu focus 20.04
+RUN sudo apt-get update && \
+    sudo apt-get install libpcre16-3 && \
+    sudo ln -s /usr/lib/x86_64-linux-gnu/libpcre16.so.3 /usr/lib/x86_64-linux-gnu/libpcre16.so.0 && \
+    sudo apt-get install libtinfo5
+
+ENV TAB_SDK_LOGDIR=/tmp/
+ENV TAB_SDK_TMPDIR=/tmp/
+
 RUN fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 

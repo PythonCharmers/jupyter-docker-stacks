@@ -215,7 +215,7 @@ RUN groupadd -g 2000 shared && \
 USER $NB_USER
 
 # For testing the image
-COPY ./Testing imports.ipynb /tmp/Testing_imports.ipynb
+COPY testing_imports.ipynb /tmp/Testing_imports.ipynb
 # For testing outside of the hub
 COPY ./AAPL.h5 /tmp/AAPL.h5
 

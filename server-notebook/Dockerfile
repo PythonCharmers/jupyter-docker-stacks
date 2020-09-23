@@ -57,6 +57,19 @@ USER root
 RUN mkdir -p /opt/conda/share/jupyter/lab/settings
 COPY overrides.json /opt/conda/share/jupyter/lab/settings/
 
+# >>> Custom Jupyter Lab User Settings
+# Where the overrides.json does not work (for shortcut keys for instance) ...
+# These user settings  from lab_user_settings are being supplanted into the settings dir
+# Does potentially create conflicts/redudance that should be cleaned up
+# Copied to /tmp to copied into home later (by pre or post start script)
+RUN mkdir -p /tmp/.jupyter/lab/user-settings/'@jupyterlab'
+COPY lab_user_settings/ /tmp/.jupyter/lab/user-settings/'@jupyterlab'
+
+# Ensure that jupyterlab uses user settings in persistent home directory
+ENV JUPYTERLAB_SETTINGS_DIR=/home/$NB_USER/.jupyter/lab/user-settings
+# allow user settings to be changed by user!
+RUN fix-permissions /home/$NB_USER/.jupyter/lab
+
 # > Config and processes
 
 # >> Folders for config and log files
@@ -79,8 +92,6 @@ COPY custom /etc/jupyter/custom
 RUN fix-permissions /etc/jupyter
 # Ensure /etc/jupyter is used as source of config
 ENV JUPYTER_CONFIG_DIR=/etc/jupyter/
-# Ensure that jupyterlab uses user settings in persistent home directory
-ENV JUPYTERLAB_SETTINGS_DIR=/home/$NB_USER/.jupyter/lab/user-settings
 
 # >> Symlinks and watchmedo_tricks
 # May need to be configured for kubernetes specific setup
@@ -175,18 +186,14 @@ RUN wget -O /tmp/tika-server.jar.md5 https://repo1.maven.org/maven2/org/apache/t
 COPY conda_requirements.txt /tmp/conda_requirements.txt
 RUN conda install --quiet --yes \
     --file /tmp/conda_requirements.txt && \
-    conda clean --all -f -y && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+    conda clean --all -f -y
 
 # >> Conda-forge installs
 COPY conda_forge_requirements.txt /tmp/conda_forge_requirements.txt
 RUN conda install --yes \
     --channel conda-forge \
     --file /tmp/conda_forge_requirements.txt && \
-    conda clean --all -f -y && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+    conda clean --all -f -y
 
 # >> pip installs
 # These come last since they have less (so much less) in the way of
@@ -199,15 +206,26 @@ COPY .bashrc /tmp/.bashrc
 
 USER root
 RUN groupadd -g 2000 shared && \
-    groupadd -g 2001 data
+    groupadd -g 2001 data && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+
 
 USER $NB_USER
 
+# For testing the image
+COPY testing_imports.ipynb /tmp/Testing_imports.ipynb
+# For testing outside of the hub
+COPY ./AAPL.h5 /tmp/AAPL.h5
+
 RUN pip install jupyterlab-git && \
-#     jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
+    jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
      jupyter labextension install jupyterlab-plotly --no-build && \
      jupyter labextension install plotlywidget --no-build && \
-     jupyter lab build -y && \
+     # dev-build=False should prevent massive JS payload
+     # necessary, as True by default when local extension is installed
+     jupyter lab build -y --dev-build=False && \
      jupyter lab clean -y && \
      rm -rf /home/$NB_USER/.cache/yarn && \
      rm -rf /home/$NB_USER/.jupyter/lab/course_theme && \
@@ -216,6 +234,31 @@ RUN pip install jupyterlab-git && \
 # PyTorch, CPU-only:
 RUN pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
 
-RUN pip cache purge && \
-    fix-permissions "${CONDA_DIR}" && \
+
+# tableau install
+RUN pip install pandleau tableauserverclient
+RUN cd /tmp && \
+    wget https://downloads.tableau.com/tssoftware/extractapi-py-linux-x86_64-2019-2-6.tar.gz && \
+    tar xf extractapi-py-linux-x86_64-2019-2-6.tar.gz && \
+    find . -maxdepth 1 -iname 'hyperextractapi*' -type d | awk 'NR==1' | xargs -I d pip install d
+    
+RUN pip cache purge
+
+USER root
+
+# to work around a sudo bug in containers for the install below
+RUN echo "Set disable_coredump false" >> /etc/sudo.conf
+
+# install binaries necessary for tableau export and ubuntu focus 20.04
+RUN sudo apt-get update && \
+    sudo apt-get install libpcre16-3 && \
+    sudo ln -s /usr/lib/x86_64-linux-gnu/libpcre16.so.3 /usr/lib/x86_64-linux-gnu/libpcre16.so.0 && \
+    sudo apt-get install libtinfo5
+
+ENV TAB_SDK_LOGDIR=/tmp/
+ENV TAB_SDK_TMPDIR=/tmp/
+
+RUN fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
+
+USER $NB_USER

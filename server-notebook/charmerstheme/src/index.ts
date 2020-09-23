@@ -6,13 +6,13 @@ import {
 import { IThemeManager } from '@jupyterlab/apputils';
 
 /**
- * A plugin for myorg/charmerstheme
+ * A plugin for pythoncharmers/charmerstheme
  */
 const plugin: JupyterFrontEndPlugin<void> = {
-  id: '@myorg/charmerstheme:plugin',
+  id: '@pythoncharmers/charmerstheme:plugin',
   requires: [IThemeManager],
   activate: function(app: JupyterFrontEnd, manager: IThemeManager) {
-    const style = '@myorg/charmerstheme/index.css';
+    const style = '@pythoncharmers/charmerstheme/index.css';
 
     manager.register({
       name: 'charmerstheme',

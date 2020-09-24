@@ -8,6 +8,16 @@ requirements.txt file in this repo is copied to image and installed by pip.
 Currently picked a build with v1.2.5 of JupyterLab
 
 
+## Managing Docker Commands
+
+To ease use (and create a kind of self documenting declarative cheat sheet), `./jupyterHub_docker_aliases` creates bash aliases for most commands necessary to create, test and push an image.
+
+See this file for a quick reference on how to use the `docker` CLI.
+
+Also, if not already done in a system's `.bashrc`, copy `./jupyterHub_docker_aliases` to an appropriate location (probably `~`) and run `source ~/jupyterHub_docker_aliases` to have the aliases available.  OR, preferably, add a line to the `.bashrc` of your system to source the file either directly from this repo or from a copy in `~`.
+
+All the aliases start with `dk_`, after which TAB-complete is your friend.  The order of aliases in the file is __roughly__ in the order of usage in a typical workflow.
+
 ## Port forwarding: part 1
 
 Run a new container from the image with:

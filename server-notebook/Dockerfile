@@ -231,8 +231,8 @@ RUN pip install jupyterlab-git && \
      rm -rf /home/$NB_USER/.jupyter/lab/course_theme && \
      npm cache clean --force
 
-# PyTorch, CPU-only:
-RUN pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
+# PyTorch (with CUDA)
+RUN pip install --no-cache-dir torch torchvision
 
 
 # tableau install

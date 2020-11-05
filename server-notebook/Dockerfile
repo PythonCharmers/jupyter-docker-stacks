@@ -241,7 +241,7 @@ RUN cd /tmp && \
     wget https://downloads.tableau.com/tssoftware/extractapi-py-linux-x86_64-2019-2-6.tar.gz && \
     tar xf extractapi-py-linux-x86_64-2019-2-6.tar.gz && \
     find . -maxdepth 1 -iname 'hyperextractapi*' -type d | awk 'NR==1' | xargs -I d pip install d
-    
+
 RUN pip cache purge
 
 USER root
@@ -262,3 +262,11 @@ RUN fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
 USER $NB_USER
+
+
+# Add env variables for cached data
+# ENV commands don't create unnecessary intermediate layers
+ENV NLTK_DATA=/home/data/Data/nltk_data
+ENV SCIKIT_LEARN_DATA=/home/data/Data/scikit_learn_data
+ENV YELLOWBRICK_DATA=/home/data/Data/yellowbrick_data
+ENV SURPRISE_DATA_FOLDER=/home/data/Data/surprise_data

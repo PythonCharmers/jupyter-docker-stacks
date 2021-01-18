@@ -202,6 +202,12 @@ RUN conda install --yes \
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
+# >> Install altair data server from GitHub (as no recent released)
+# Necessary to use with proxy server on hub (which is in requirements.txt)
+# from latest commit as of 2021-01-18
+
+RUN pip install git+https://github.com/altair-viz/altair_data_server.git@b0fdb38205877df7833481baa04b26ac6a9a245e
+
 COPY .bashrc /tmp/.bashrc
 
 USER root

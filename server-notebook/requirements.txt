@@ -45,6 +45,7 @@ inflect
 ipytest
 itsdangerous
 jellyfish
+jupyter-server-proxy
 karateclub
 kerberos
 keyring

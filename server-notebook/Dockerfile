@@ -188,9 +188,6 @@ RUN conda install --quiet --yes \
     --file /tmp/conda_requirements.txt && \
     conda clean --all -f -y
 
-# Unresolved incompatibility between yellowbrick/eli5 and sklearn 0.24 ... downgrade
-RUN conda install --quiet --yes scikit-learn=0.23.2 && conda clean --all -f -y
-
 # >> Conda-forge installs
 COPY conda_forge_requirements.txt /tmp/conda_forge_requirements.txt
 RUN conda install --yes \
@@ -212,6 +209,9 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 RUN pip install git+https://github.com/altair-viz/altair_data_server.git@b0fdb38205877df7833481baa04b26ac6a9a245e
 # incompatibility issues between voila and jupyterlab resolved with pinning this version
 RUN pip install -U voila==0.2.4
+
+# Unresolved incompatibility between yellowbrick/eli5 and sklearn 0.24 ... downgrade
+RUN conda install --quiet --yes scikit-learn=0.23.2 && conda clean --all -f -y
 
 COPY .bashrc /tmp/.bashrc
 

@@ -207,6 +207,8 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 # from latest commit as of 2021-01-18
 
 RUN pip install git+https://github.com/altair-viz/altair_data_server.git@b0fdb38205877df7833481baa04b26ac6a9a245e
+# incompatibility issues between voila and jupyterlab resolved with pinning this version
+RUN pip install -U voila=0.2.4
 
 COPY .bashrc /tmp/.bashrc
 

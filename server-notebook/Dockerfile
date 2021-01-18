@@ -188,6 +188,9 @@ RUN conda install --quiet --yes \
     --file /tmp/conda_requirements.txt && \
     conda clean --all -f -y
 
+# Unresolved incompatibility between yellowbrick/eli5 and sklearn 0.24 ... downgrade
+RUN conda install --quiet --yes scikit-learn=0.23.2 && conda clean --all -f -y
+
 # >> Conda-forge installs
 COPY conda_forge_requirements.txt /tmp/conda_forge_requirements.txt
 RUN conda install --yes \

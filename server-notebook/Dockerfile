@@ -281,3 +281,6 @@ ENV NLTK_DATA=/home/data/Data/nltk_data
 ENV SCIKIT_LEARN_DATA=/home/data/Data/scikit_learn_data
 ENV YELLOWBRICK_DATA=/home/data/Data/yellowbrick_data
 ENV SURPRISE_DATA_FOLDER=/home/data/Data/surprise_data
+
+RUN pip install streamlit
+RUN pip install -U protobuf

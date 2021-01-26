@@ -69,6 +69,7 @@ pdf2image
 pillow
 pint
 plotly
+protobuf>=3.14
 psutil
 pyarrow
 pycodestyle
@@ -90,6 +91,7 @@ rtree
 scapy
 scrapy
 sh
+streamlit
 tensorflow==2.2.0
 teradata
 teradatasql

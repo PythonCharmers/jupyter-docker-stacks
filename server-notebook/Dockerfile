@@ -1,5 +1,5 @@
 # Build of jupyter/pyspark-notebook from 2020-07-22:
-FROM jupyter/pyspark-notebook:b90cce83f37b
+FROM jupyter/scipy-notebook:python-3.9.6
 
 USER root
 RUN apt-get update

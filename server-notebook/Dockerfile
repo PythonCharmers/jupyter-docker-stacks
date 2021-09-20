@@ -273,6 +273,10 @@ ENV TAB_SDK_TMPDIR=/tmp/
 RUN fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
+# Temp overrides for quick build
+RUN rm /opt/conda/share/jupyter/lab/settings/overrides.json
+COPY overrides2.json /opt/conda/share/jupyter/lab/settings/overrides.json
+
 USER $NB_USER
 
 

@@ -1,4 +1,4 @@
-# Build of jupyter/pyspark-notebook from 2020-07-22:
+# Build of jupyter/tensorflow from 2021-09-18
 FROM jupyter/tensorflow-notebook:python-3.9.6
 
 USER root
@@ -231,7 +231,8 @@ COPY testing_imports.ipynb /tmp/Testing_imports.ipynb
 COPY ./AAPL.h5 /tmp/AAPL.h5
 
 RUN pip install jupyterlab-git && \
-    jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
+    # course_theme needs to be updated to latest version of jupyterlab
+    # jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
      jupyter labextension install jupyterlab-plotly --no-build && \
      jupyter labextension install plotlywidget --no-build && \
      # dev-build=False should prevent massive JS payload

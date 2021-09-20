@@ -230,11 +230,19 @@ COPY testing_imports.ipynb /tmp/Testing_imports.ipynb
 # For testing outside of the hub
 COPY ./AAPL.h5 /tmp/AAPL.h5
 
+# variable inspector ... may not work with jupyterlab 3.1.X ... but we can hope
+RUN pip install lckr-jupyterlab-variableinspector
+
+# install themes incl our "custom charmerstheme"
+RUN pip install jupyterlab_legos_ui  && \
+    pip install jupyterlab_darkside_ui && \
+    pip install /home/$NB_USER/.jupyter/lab/course_theme
+
 RUN pip install jupyterlab-git && \
     # course_theme needs to be updated to latest version of jupyterlab
     # jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
-     jupyter labextension install jupyterlab-plotly --no-build && \
-     jupyter labextension install plotlywidget --no-build && \
+     # jupyter labextension install jupyterlab-plotly --no-build && \
+     # jupyter labextension install plotlywidget --no-build && \
      # dev-build=False should prevent massive JS payload
      # necessary, as True by default when local extension is installed
      jupyter lab build -y --dev-build=False && \
@@ -276,6 +284,14 @@ RUN fix-permissions "${CONDA_DIR}" && \
 # Temp overrides for quick build
 RUN rm /opt/conda/share/jupyter/lab/settings/overrides.json
 COPY overrides2.json /opt/conda/share/jupyter/lab/settings/overrides.json
+
+# variable inspector ... may not work with jupyterlab 3.1.X ... but we can hope
+RUN pip install lckr-jupyterlab-variableinspector
+
+# install themes incl our "custom charmerstheme"
+RUN pip install jupyterlab_legos_ui  && \
+    pip install jupyterlab_darkside_ui && \
+    pip install /home/$NB_USER/.jupyter/lab/course_theme
 
 USER $NB_USER
 

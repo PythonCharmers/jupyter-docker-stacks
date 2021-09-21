@@ -231,25 +231,27 @@ COPY testing_imports.ipynb /tmp/Testing_imports.ipynb
 COPY ./AAPL.h5 /tmp/AAPL.h5
 
 # variable inspector ... may not work with jupyterlab 3.1.X ... but we can hope
-RUN pip install lckr-jupyterlab-variableinspector
+RUN pip install --no-cache-dir lckr-jupyterlab-variableinspector
 
 # install themes incl our "custom charmerstheme"
-RUN pip install jupyterlab_legos_ui  && \
-    pip install jupyterlab_darkside_ui && \
-    pip install /home/$NB_USER/.jupyter/lab/course_theme
+RUN pip install --no-cache-dir jupyterlab_legos_ui  && \
+    pip install --no-cache-dir jupyterlab_darkside_ui && \
+    pip install --no-cache-dir /home/$NB_USER/.jupyter/lab/course_theme
 
-RUN pip install jupyterlab-git && \
-    # course_theme needs to be updated to latest version of jupyterlab
-    # jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
-     # jupyter labextension install jupyterlab-plotly --no-build && \
-     # jupyter labextension install plotlywidget --no-build && \
-     # dev-build=False should prevent massive JS payload
-     # necessary, as True by default when local extension is installed
-     jupyter lab build -y --dev-build=False && \
-     jupyter lab clean -y && \
-     rm -rf /home/$NB_USER/.cache/yarn && \
-     rm -rf /home/$NB_USER/.jupyter/lab/course_theme && \
-     npm cache clean --force
+# Install jupyterlab-git, jupyter dash extension (works?)
+RUN pip install --no-cache-dir --upgrade jupyterlab jupyterlab-git && \
+    pip install --no-cache-dir jupyter-dash
+
+# RUN pip install jupyterlab-git && \
+#     # course_theme needs to be updated to latest version of jupyterlab
+#     # jupyter labextension install /home/$NB_USER/.jupyter/lab/course_theme --no-build && \
+#      # dev-build=False should prevent massive JS payload
+#      # necessary, as True by default when local extension is installed
+#      jupyter lab build -y --dev-build=False && \
+#      jupyter lab clean -y && \
+#      rm -rf /home/$NB_USER/.cache/yarn && \
+#      rm -rf /home/$NB_USER/.jupyter/lab/course_theme && \
+#      npm cache clean --force
 
 # PyTorch (with CUDA)
 RUN pip install --no-cache-dir torch torchvision
@@ -282,16 +284,10 @@ RUN fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
 # Temp overrides for quick build
+# in future ... merge overrides and overrides2 and remove these lines and rebuild from scratch
 RUN rm /opt/conda/share/jupyter/lab/settings/overrides.json
 COPY overrides2.json /opt/conda/share/jupyter/lab/settings/overrides.json
 
-# variable inspector ... may not work with jupyterlab 3.1.X ... but we can hope
-RUN pip install lckr-jupyterlab-variableinspector
-
-# install themes incl our "custom charmerstheme"
-RUN pip install jupyterlab_legos_ui  && \
-    pip install jupyterlab_darkside_ui && \
-    pip install /home/$NB_USER/.jupyter/lab/course_theme
 
 USER $NB_USER
 

@@ -190,14 +190,20 @@ RUN conda install --quiet --yes scikit-learn=0.23.2 && conda clean --all -f -y
 # >> PyTorch (with CUDA)
 RUN pip install --no-cache-dir torch torchvision
 
-# >> Temporary fix for h5py
+# >> Temporary fixes
+
+# >>> for h5py
 # see https://github.com/h5py/h5py/issues/1880
 # an error with "undefined symbol: H5Pset_fapl_ros3" arises
 # Pinnning a downgrade to less than h5py=3.2 seems to do the trick
 
 # Also, Lets try mamba now?!
-RUN mamba install h5py=3.1
+RUN mamba install --quiet --yes h5py=3.1
 
+# >>> jupyter-dash
+# some bug with jupyter-dash requires build and prompts for a build on log-in?
+
+RUN pip uninstall --yes jupyter-dash
 
 
 

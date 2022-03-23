@@ -23,7 +23,6 @@ email_validator
 fabric
 faker
 fastapi
-faust
 flake8
 flask
 flask-apscheduler
@@ -87,6 +86,7 @@ pytest-cov
 QuantLib
 redis
 requests
+rioxarray
 rtree
 scapy
 scrapy

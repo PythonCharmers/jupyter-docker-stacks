@@ -202,13 +202,25 @@ RUN pip install --no-cache-dir torch torchvision
 # Pinnning a downgrade to less than h5py=3.2 seems to do the trick
 
 # Also, Lets try mamba now?!
-RUN mamba install --quiet --yes h5py=3.1
-RUN mamba update --quiet --yes scikit-learn
+RUN mamba install --quiet --yes scikit-learn h5py=3.1 && \
+    mamba clean --all -f -y
+
+# >>> black downgrade
+# to be compatible with fiona and click <8.0.0
+# see https://github.com/psf/black/issues/2774
+RUN pip install -U black==21.12b0
 
 # >>> jupyter-dash
 # some bug with jupyter-dash requires build and prompts for a build on log-in?
 
 RUN pip uninstall --yes jupyter-dash
+
+# >>> More Testing Resources
+# should remove testing notebook copy from above
+# and put it lower in the dockerfile so that it can be updated
+# more easily
+
+COPY testing_resources/ /tmp/testing_resources/
 
 
 

@@ -88,10 +88,12 @@ COPY overrides.json /opt/conda/share/jupyter/lab/settings/
 # These user settings  from lab_user_settings are being supplanted into the settings dir
 # Does potentially create conflicts/redudance that should be cleaned up
 # Copied to /tmp to copied into home later (by pre or post start script)
-RUN mkdir -p /tmp/.jupyter/lab/user-settings/'@jupyterlab'
-COPY lab_user_settings/ /tmp/.jupyter/lab/user-settings/'@jupyterlab'
+# Overrides now work well even for key bindings ... redundant
+# RUN mkdir -p /tmp/.jupyter/lab/user-settings/'@jupyterlab'
+# COPY lab_user_settings/ /tmp/.jupyter/lab/user-settings/'@jupyterlab'
 
 # Ensure that jupyterlab uses user settings in persistent home directory
+RUN mkdir -p /tmp/.jupyter/lab/user-settings/'@jupyterlab'
 ENV JUPYTERLAB_SETTINGS_DIR=/home/$NB_USER/.jupyter/lab/user-settings
 # allow user settings to be changed by user!
 RUN fix-permissions /home/$NB_USER/.jupyter/lab
@@ -190,7 +192,9 @@ RUN conda install --quiet --yes scikit-learn=0.23.2 && conda clean --all -f -y
 # >> PyTorch (with CUDA)
 RUN pip install --no-cache-dir torch torchvision
 
-# >> Temporary fixes
+# >> !! Temporary fixes
+
+# SHOULD FOLD THESE INTO A CLEAN BUILD FOR NEXT MAJOR REVISION!
 
 # >>> for h5py
 # see https://github.com/h5py/h5py/issues/1880
@@ -199,6 +203,7 @@ RUN pip install --no-cache-dir torch torchvision
 
 # Also, Lets try mamba now?!
 RUN mamba install --quiet --yes h5py=3.1
+RUN mamba update --quiet --yes scikit-learn
 
 # >>> jupyter-dash
 # some bug with jupyter-dash requires build and prompts for a build on log-in?

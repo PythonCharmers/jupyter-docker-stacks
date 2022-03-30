@@ -265,6 +265,10 @@ ENV JUPYTER_CONFIG_DIR=/etc/jupyter/
 # RUN ln -s /home/data/Data /Data && \
 #         ln -s /home/$NB_USER /Work
 
+# sighs ... this needs to be done here because jovyan doesn't have permission to do so
+# does hard code the data path in the docker build, which is not a nice spot for it
+# ... maybe rely on just the home directoy link instead
+Run ln -s /home/data/Data /Data
 # >> Setup keyring
 # keyring requires setup to run on a headless server (something to do with the way the user sessions are managed...). The work-around is a keyring extension and a manual config:
 

@@ -1,6 +1,10 @@
 # location of docker source repo on disk
+# MAY NEED TO ADJUST TO LOCAL ENV !!
 docker_stacks_dir="$HOME/docker-stacks"
-  
+
+# alternative is to source when in the docker stacks dir
+docker_stacks_dir="$(pwd)"
+
 # location of directory for specific image to be used on the jupyterhub server
 server_image="$docker_stacks_dir/server-notebook/"
 

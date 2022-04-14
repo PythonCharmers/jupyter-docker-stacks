@@ -6,13 +6,15 @@ import {
 import { IThemeManager } from '@jupyterlab/apputils';
 
 /**
- * A plugin for pythoncharmers/charmerstheme
+ * Initialization data for the charmerstheme extension.
  */
-const plugin: JupyterFrontEndPlugin<void> = {
-  id: '@pythoncharmers/charmerstheme:plugin',
+const extension: JupyterFrontEndPlugin<void> = {
+  id: 'charmerstheme',
   requires: [IThemeManager],
-  activate: function(app: JupyterFrontEnd, manager: IThemeManager) {
-    const style = '@pythoncharmers/charmerstheme/index.css';
+  autoStart: true,
+  activate: (app: JupyterFrontEnd, manager: IThemeManager) => {
+    console.log('JupyterLab extension charmerstheme is activated!');
+    const style = 'charmerstheme/index.css';
 
     manager.register({
       name: 'charmerstheme',
@@ -20,8 +22,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       load: () => manager.loadCSS(style),
       unload: () => Promise.resolve(undefined)
     });
-  },
-  autoStart: true
+  }
 };
 
-export default plugin;
+export default extension;

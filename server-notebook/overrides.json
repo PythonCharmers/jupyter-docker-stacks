@@ -17,5 +17,31 @@
     },
     "@jupyterlab/extensionmanager-extension:plugin": {
         "enabled": true
+    },
+    "@jupyterlab/shortcuts-extension:shortcuts": {
+        "shortcuts": [
+        {
+          "command": "notebook:hide-cell-outputs",
+          "keys": [
+            "O"
+          ],
+          "selector": ".jp-Notebook:focus"
+        },
+        {
+          "command": "notebook:show-cell-outputs",
+          "keys": [
+            "Shift O"
+          ],
+          "selector": ".jp-Notebook:focus"
+        },
+        {
+            "command": "notebook:change-cell-to-raw",
+            "keys": [
+                "R"
+            ],
+            "selector": ".jp-Notebook:focus",
+            "disabled": true
+        }
+    ]
     }
 }

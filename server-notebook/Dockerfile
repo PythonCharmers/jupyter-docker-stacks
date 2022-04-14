@@ -265,8 +265,15 @@ ENV JUPYTER_CONFIG_DIR=/etc/jupyter/
 # RUN ln -s /home/data/Data /Data && \
 #         ln -s /home/$NB_USER /Work
 
+USER root
+# sighs ... this needs to be done here because jovyan doesn't have permission to do so
+# does hard code the data path in the docker build, which is not a nice spot for it
+# ... maybe rely on just the home directoy link instead
+Run ln -s /home/data/Data /Data
 # >> Setup keyring
 # keyring requires setup to run on a headless server (something to do with the way the user sessions are managed...). The work-around is a keyring extension and a manual config:
+
+USER $NB_USER
 
 COPY keyringrc.cfg /tmp/keyringrc.cfg
 
@@ -277,9 +284,10 @@ ENV SCIKIT_LEARN_DATA=/home/data/Data/scikit_learn_data
 ENV YELLOWBRICK_DATA=/home/data/Data/yellowbrick_data
 ENV SURPRISE_DATA_FOLDER=/home/data/Data/surprise_data
 
-USER $NB_USER
 
 # > Get the tika jar
+USER $NB_USER
+
 # what is this!!
 # RUN wget -O /tmp/tika-server.jar https://repo1.maven.org/maven2/org/apache/tika/tika-server/1.24.1/tika-server-1.24.1.jar
 # RUN wget -O /tmp/tika-server.jar.md5 https://repo1.maven.org/maven2/org/apache/tika/tika-server/1.24.1/tika-server-1.24.1.jar.md5

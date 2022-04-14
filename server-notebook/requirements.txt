@@ -92,7 +92,7 @@ scapy
 scrapy
 sh
 streamlit
-tensorflow==2.2.0
+tensorflow
 teradata
 teradatasql
 textdistance

@@ -153,16 +153,16 @@ RUN pip install --no-cache-dir --upgrade jupyterlab jupyterlab-git && \
 # because we're using conda
 
 COPY conda_requirements.txt /tmp/conda_requirements.txt
-RUN conda install --quiet --yes \
+RUN mamba install --quiet --yes \
     --file /tmp/conda_requirements.txt && \
-    conda clean --all -f -y
+    mamba clean --all -f -y
 
 # >> Conda-forge installs
 COPY conda_forge_requirements.txt /tmp/conda_forge_requirements.txt
-RUN conda install --yes \
+RUN mamba install --yes \
     --channel conda-forge \
     --file /tmp/conda_forge_requirements.txt && \
-    conda clean --all -f -y
+    mamba clean --all -f -y
 
 # >> pip installs
 # These come last since they have less (so much less) in the way of

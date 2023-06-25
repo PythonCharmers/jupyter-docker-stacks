@@ -1,4 +1,4 @@
-FROM jupyter/scipy-notebook
+FROM jupyter/scipy-notebook:846f4cd31970
 
 USER root
 RUN apt-get update
@@ -52,8 +52,9 @@ RUN wget -O /tmp/ngrok_install.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-st
 # > Jupyter Lab Custom Files
 
 # >> Custom Theme
-COPY charmerstheme/ /home/$NB_USER/.jupyter/lab/course_theme
+# COPY charmerstheme/ /home/$NB_USER/.jupyter/lab/course_theme
 # Allow user to change their settings
+RUN mkdir -p /home/$NB_USER/.jupyter/lab
 RUN fix-permissions /home/$NB_USER/.jupyter/lab
 
 
@@ -123,7 +124,7 @@ RUN pip install --no-cache-dir lckr-jupyterlab-variableinspector
 
 # >> Our Custom theme: charmerstheme
 # install themes incl our "custom charmerstheme"
-RUN pip install --no-cache-dir /home/$NB_USER/.jupyter/lab/course_theme
+# RUN pip install --no-cache-dir /home/$NB_USER/.jupyter/lab/course_theme
 
 # >> jupyterlab-git
 # Install jupyterlab-git, jupyter dash extension (works?)

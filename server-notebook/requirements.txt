@@ -32,7 +32,7 @@ flask-restplus
 flask-security-too
 flask-sqlalchemy
 folium
-gekko
+# gekko
 geoalchemy2
 graphviz
 h5py
@@ -60,7 +60,7 @@ marshmallow-sqlalchemy
 mypy
 mysql-connector-python
 mystic
-nb_black
+# nb_black
 nbconvert
 networkx
 openml
@@ -101,7 +101,7 @@ textdistance
 textract
 tika
 vega-datasets
-voila
+# voila
 wikipedia
 xlutils
 wordcloud

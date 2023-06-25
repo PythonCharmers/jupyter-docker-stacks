@@ -22,9 +22,10 @@ All the aliases start with `dk_`, after which TAB-complete is your friend.  The 
 
 Run a new container from the image with:
 
-    sudo docker run -p 8999:8888 pythoncharmers/jupyter-docker-stacks
+    # Maybe use "sudo docker run ..." depending on how docker is set up:
+    docker run -p 8888:8888 pythoncharmers/jupyter-docker-stacks
 
-This forwards port 8888 in the docker container to port 8999 on the EC2 instance.
+This forwards port 8888 in the docker container to port 8888 on the EC2 instance.
 
 ## Port forwarding: part 2
 
@@ -35,3 +36,14 @@ For local testing / use on your desktop, you can use SSH port forwarding with:
 where 8900 is the port on your desktop to forward
       8999 is the port on the EC2 instance (which must also be mapped to the Docker container)
       13.210.... is the IP address of the EC2 instance
+
+## Push to Docker Hub
+
+```
+docker build -t pythoncharmers-2023-06 .
+# Test it ...
+# Then:
+docker login -u edschofield
+docker tag pythoncharmers-2023-06:latest pythoncharmers/jupyter-docker-stacks:2023-06   # is this necessary? correct?
+docker push pythoncharmers/jupyter-docker-stacks:2023-06     # or other tagname
+```

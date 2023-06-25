@@ -1,0 +1,21 @@
+QuantLib
+redis
+requests
+rioxarray
+rtree
+scapy
+scrapy
+sh
+streamlit
+teradata
+teradatasql
+textdistance
+textract
+tika
+vega-datasets
+# voila
+wikipedia
+xlutils
+wordcloud
+yellowbrick
+zarr

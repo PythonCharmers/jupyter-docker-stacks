@@ -1,4 +1,4 @@
-FROM jupyter/scipy-notebook:846f4cd31970
+FROM jupyter/scipy-notebook:python-3.10
 
 USER root
 RUN apt-get update
@@ -172,6 +172,18 @@ RUN mamba install --yes \
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
+COPY requirements2.txt /tmp/requirements2.txt
+RUN pip install --no-cache-dir -r /tmp/requirements2.txt
+
+COPY requirements2b.txt /tmp/requirements2b.txt
+RUN pip install --no-cache-dir -r /tmp/requirements2b.txt
+
+COPY requirements3.txt /tmp/requirements3.txt
+RUN pip install --no-cache-dir -r /tmp/requirements3.txt
+
+COPY requirements4.txt /tmp/requirements4.txt
+RUN pip install --no-cache-dir -r /tmp/requirements4.txt
+
 # >> Install altair data server from GitHub (as no recent released)
 # Necessary to use with proxy server on hub (which is in requirements.txt)
 RUN pip install git+https://github.com/altair-viz/altair_data_server.git
@@ -188,7 +200,7 @@ RUN pip install -U streamlit
 
 
 # >> PyTorch (with CUDA)
-RUN pip install --no-cache-dir torch torchvision torchaudio
+# RUN pip install --no-cache-dir torch torchvision torchaudio
 
 # >> !! Temporary fixes
 
@@ -238,6 +250,8 @@ COPY testing_resources/ /tmp/testing_resources/
 # # >> ?Copying config files for supervisor and watchmedo
 # COPY supervisord.conf /etc/supervisor/supervisord.conf
 # COPY watchmedo.conf /etc/supervisor/conf.d/watchmedo.conf
+
+USER root
 
 # >> ?setting up custom jupyter css and js for original notebook
 # old notebook will be deprecated soon for the jupyterlab based simple nb

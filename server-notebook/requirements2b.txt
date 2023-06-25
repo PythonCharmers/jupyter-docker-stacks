@@ -1,0 +1,28 @@
+# gekko
+geoalchemy2
+graphviz
+h5py
+holoviews
+httpie
+humanize
+hypothesis
+imbalanced-learn
+inflect
+ipytest
+itsdangerous
+jellyfish
+jupyter-collaboration
+jupyter-server-proxy
+# karateclub
+kerberos
+keyring
+keyrings.cryptfile
+koalas
+ldap3
+# littleballoffur
+logzero
+marshmallow
+marshmallow-sqlalchemy
+mypy
+mysql-connector-python
+mystic

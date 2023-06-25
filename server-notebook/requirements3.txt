@@ -1,0 +1,26 @@
+# nb_black
+nbconvert
+networkx
+openml
+openpyxl
+ortools
+passlib
+pdf2image
+pillow
+pint
+plotly
+protobuf>=3.14
+psutil
+pyarrow
+pycodestyle
+pydantic-sqlalchemy
+pydot
+pyhive
+pylint
+pymongo
+pyod
+pyomo
+pysal
+pytesseract
+pytest
+pytest-cov

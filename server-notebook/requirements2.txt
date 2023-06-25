@@ -1,0 +1,13 @@
+eli5
+email_validator
+fabric
+faker
+fastapi
+flake8
+flask
+flask-apscheduler
+flask-httpauth
+flask-restplus
+flask-security-too
+flask-sqlalchemy
+folium

@@ -1,9 +1,9 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-# ARG BASE_CONTAINER=pythoncharmers/minimal-notebook:latest
-# FROM $BASE_CONTAINER
-FROM pythoncharmers/minimal-notebook:latest
 
+# Don't forget to keep the dockerhub image updated
+ARG BASE_CONTAINER=pythoncharmers/minimal-notebook:latest
+FROM $BASE_CONTAINER
 
 USER root
 
@@ -13,26 +13,20 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
+
 COPY requirements.txt /home/$NB_UID/requirements.txt
+COPY requirements_pip.txt /home/$NB_UID/requirements_pip.txt
 
 # Install Python 3 packages
 # RUN pip install -r /home/$NB_UID/requirements.txt
 RUN conda install --quiet --yes \
-    --file /home/$NB_UID/requirements.txt \
-    && \
-    conda clean --all -f -y && \
-    # Activate ipywidgets extension in the environment that runs the notebook server
-    jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
-    # Also activate ipywidgets extension for JupyterLab
-    # Check this URL for most recent compatibilities
-    # https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
-    # changing versions of lab extensions to jupyterLab v1.2 compatible
-    # jupyter labextension install @jupyter-widgets/jupyterlab-manager@^2.0.0 --no-build && \
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager@^1.1 --no-build && \
-    # jupyter labextension install @bokeh/jupyter_bokeh@^2.0.0 --no-build && \
-    jupyter labextension install @bokeh/jupyter_bokeh@^1.0.0 --no-build && \
-    # This labextension doesn't seem to be worth the effort
-    # jupyter labextension install jupyter-matplotlib@^0.7.2 --no-build && \
+    --file /home/$NB_UID/requirements.txt
+
+# Install the compatible jupyter_bokeh version
+RUN pip install -r /home/$NB_UID/requirements_pip.txt
+
+RUN conda clean --all -f -y && \
+    jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
     jupyter lab build -y && \
     jupyter lab clean -y && \
     npm cache clean --force && \

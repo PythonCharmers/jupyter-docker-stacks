@@ -5,15 +5,19 @@
 # https://hub.docker.com/_/ubuntu/?tab=tags&name=bionic
 # OS/ARCH: linux/amd64
 
-# modified by Errol Lloyd
+# modified by Errol Lloyd & Andrey Nozhkin
 
-ARG ROOT_CONTAINER=ubuntu:bionic-20200311@sha256:e5dd9dbb37df5b731a6688fa49f4003359f6f126958c9c928f937bec69836320
+ARG ROOT_CONTAINER=ubuntu:jammy-20231004@sha256:c9cf959fd83770dfdefd8fb42cfef0761432af36a764c077aed54bbc5bb25368
 ARG BASE_CONTAINER=$ROOT_CONTAINER
 FROM $BASE_CONTAINER
 
 ARG NB_USER="jovyan"
 ARG NB_UID="1000"
 ARG NB_GID="100"
+
+# Fix: https://github.com/hadolint/hadolint/wiki/DL4006
+# Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER root
 
@@ -27,12 +31,45 @@ RUN apt-get update \
     ca-certificates \
     sudo \
     locales \
+    pandoc \
     fonts-liberation \
     run-one \
+    build-essential \
+    emacs-nox \
+    vim-tiny \
+    git \
+    inkscape \
+    jed \
+    libsm6 \
+    libxext-dev \
+    libxrender1 \
+    lmodern \
+    tzdata \
+    unzip \
+    openssh-client \
+    zlib1g-dev \
+    libncurses5-dev \
+    libgdbm-dev \
+    libnss3-dev \
+    libssl-dev \
+    libreadline-dev \
+    libffi-dev \
+    libsqlite3-dev \
+    libbz2-dev \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
+
+# Install Python 3.11
+RUN cd /usr/src \
+    && wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz \
+    && tar -xzf Python-3.11.0.tgz \
+    && cd Python-3.11.0 \
+    && ./configure --enable-optimizations \
+    && make -j 6 && make -j 6 altinstall
+
+RUN update-alternatives --install /usr/bin/python python /usr/local/bin/python3.11 1
 
 # Configure environment
 ENV CONDA_DIR=/opt/conda \
@@ -67,27 +104,31 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
 
 USER $NB_UID
 WORKDIR $HOME
-ARG PYTHON_VERSION=default
+ARG PYTHON_VERSION=3.11
 
 # Setup work directory for backward-compatibility
 RUN mkdir /home/$NB_USER/work && \
     fix-permissions /home/$NB_USER
 
 # Install conda as jovyan and check the md5 sum provided on the download site
-ENV MINICONDA_VERSION=4.8.2 \
-    MINICONDA_MD5=87e77f097f6ebb5127c77662dfc3165e \
-    CONDA_VERSION=4.8.2
+ENV MINICONDA_VERSION=23.9.0 \
+    MINICONDA_SHA256=43651393236cb8bb4219dcd429b3803a60f318e5507d8d84ca00dafa0c69f1bb \
+    CONDA_VERSION=23.9.0
 
 RUN cd /tmp && \
-    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-py37_${MINICONDA_VERSION}-Linux-x86_64.sh && \
-    echo "${MINICONDA_MD5} *Miniconda3-py37_${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
-    /bin/bash Miniconda3-py37_${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
-    rm Miniconda3-py37_${MINICONDA_VERSION}-Linux-x86_64.sh && \
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
+    echo "${MINICONDA_SHA256} miniconda.sh" | sha256sum --check --status - && \
+    /bin/bash miniconda.sh -f -b -p $CONDA_DIR && \
+    rm miniconda.sh
+
+RUN cd /tmp && \
     echo "conda ${CONDA_VERSION}" >> $CONDA_DIR/conda-meta/pinned && \
     conda config --system --prepend channels conda-forge && \
     conda config --system --set auto_update_conda false && \
     conda config --system --set show_channel_urls true && \
-    conda config --system --set channel_priority strict && \
+    conda config --system --set channel_priority strict
+
+RUN cd /tmp && \
     if [ ! $PYTHON_VERSION = 'default' ]; then conda install --yes python=$PYTHON_VERSION; fi && \
     conda list python | grep '^python ' | tr -s ' ' | cut -d '.' -f 1,2 | sed 's/$/.*/' >> $CONDA_DIR/conda-meta/pinned && \
     conda install --quiet --yes conda && \
@@ -99,7 +140,7 @@ RUN cd /tmp && \
     fix-permissions /home/$NB_USER
 
 # Install Tini
-RUN conda install --quiet --yes 'tini=0.18.0' && \
+RUN conda install --quiet --yes 'tini=0.19.0' && \
     conda list tini | grep tini | tr -s ' ' | cut -d ' ' -f 1,2 >> $CONDA_DIR/conda-meta/pinned && \
     conda clean --all -f -y && \
     fix-permissions $CONDA_DIR && \
@@ -112,9 +153,10 @@ RUN conda install --quiet --yes 'tini=0.18.0' && \
 # Do all this in a single RUN command to avoid duplicating all of the
 # files across image layers when the permissions change
 RUN conda install --quiet --yes \
-    'notebook=6.0.3' \
-    'jupyterhub=1.1.0' \
-    'jupyterlab=1.2.0' && \
+    'notebook=7.0.6' \
+    'jupyterhub=4.0.2' \
+    'nbclassic=1.0.0' \
+    'jupyterlab=4.0.7' && \
     conda clean --all -f -y && \
     npm cache clean --force && \
     jupyter notebook --generate-config && \
@@ -123,7 +165,8 @@ RUN conda install --quiet --yes \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
-EXPOSE 8888
+ENV JUPYTER_PORT=8888
+EXPOSE $JUPYTER_PORT
 
 # Configure container startup
 ENTRYPOINT ["tini", "-g", "--"]

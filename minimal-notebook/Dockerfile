@@ -4,7 +4,7 @@
 # FROM $BASE_CONTAINER
 
 # Don't forget to keep the dockerhub image updated
-FROM pythoncharmers/base-notebook:latest
+FROM pythoncharmers/base-notebook:vscode
 
 # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014

@@ -1,15 +1,13 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-
-# Don't forget to keep the dockerhub image updated
-ARG BASE_CONTAINER=pythoncharmers/minimal-notebook:latest
+ARG BASE_CONTAINER=pythoncharmers/minimal-notebook:vscode
 FROM $BASE_CONTAINER
 
 USER root
 
 # ffmpeg for matplotlib anim & dvipng for latex labels
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg dvipng && \
+    apt-get install -y --no-install-recommends ffmpeg dvipng nginx && \
     rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
@@ -52,4 +50,20 @@ ENV XDG_CACHE_HOME /home/$NB_USER/.cache/
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
     fix-permissions /home/$NB_USER
 
-USER $NB_UID
+USER root
+
+# copy the Jupyterlab extension
+COPY open_in_vscode.tar /opt/conda/share/jupyter/lab/extensions/
+RUN chmod 777 -R /opt/conda/share/jupyter/lab/extensions/
+
+# install code-server (VSCode)
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+COPY start_procs.sh /usr/local/bin/start_procs.sh
+RUN chmod +x /usr/local/bin/start_procs.sh
+
+# configure Nginx
+COPY configure_nginx.sh /usr/local/bin/configure_nginx.sh
+RUN chmod +x /usr/local/bin/configure_nginx.sh
+RUN configure_nginx.sh
+
+ENTRYPOINT ["start_procs.sh"]

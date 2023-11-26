@@ -69,7 +69,6 @@ dockerspawner.tar.gz
 .vscode/
 .pytest_cache/
 server-notebook/open_in_vscode/open_in_vscode/labextension/build_log.json
-server-notebook/open_in_vscode/open_in_vscode/labextension/static/
 
 # IDE
 .idea

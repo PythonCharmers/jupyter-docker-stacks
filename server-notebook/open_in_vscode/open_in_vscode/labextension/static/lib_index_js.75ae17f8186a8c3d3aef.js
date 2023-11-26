@@ -107,6 +107,30 @@ function getCurrentDomain(app) {
     // Return the protocol and domain part
     return `${fullUrl.protocol}//${fullUrl.hostname}`;
 }
+
+function buildVscodeServerUrl() {
+    const vscodeServerPath = 'vscode-server';
+    const currentUrl = new URL(window.location.href);
+    const pathSegments = currentUrl.pathname.split('/');
+
+    // Find the index of the user segment (assuming the format /user/{username}/...)
+    const userSegmentIndex = pathSegments.findIndex(segment => segment === 'user');
+    if (userSegmentIndex === -1 || userSegmentIndex + 1 >= pathSegments.length) {
+        throw new Error('User segment not found in URL');
+    }
+
+    // Rebuild the base URL up to the username
+    const baseUrlSegments = pathSegments.slice(0, userSegmentIndex + 2);
+    const baseUrl = `${currentUrl.protocol}//${currentUrl.host}/${baseUrlSegments.filter(Boolean).join('/')}`;
+
+    // Construct the final URL
+    const finalUrl = baseUrl.endsWith(vscodeServerPath) || baseUrl.endsWith(vscodeServerPath + '/') 
+                     ? baseUrl 
+                     : `${baseUrl}/${vscodeServerPath}`;
+
+    return finalUrl;
+}
+
 /**
  * The command IDs.
  */
@@ -175,12 +199,10 @@ const extension = {
                         body: JSON.stringify({ path: selected.path })
                     })
                         .then(data => {
-                        // the server part worked properly, it means VSCode should've already opened the file,
-                        //  so lets just open a new tab where VSCode is
-                        let currentDomain = getCurrentDomain(app);
-                        let vscodeUrl = new URL(currentDomain);
-                        vscodeUrl.port = '14853'; // TODO: move to settings         
-                        window.open(vscodeUrl.toString(), '_blank');
+                          // the server part worked properly, it means VSCode should've already opened the file,
+                          //  so lets just open a new tab where VSCode is
+                          let vscodeUrl = buildVscodeServerUrl();
+                          window.open(vscodeUrl.toString(), '_blank');
                     })
                         .catch(reason => {
                         console.error(`The open_in_vscode server extension appears to be missing.\n${reason}`);

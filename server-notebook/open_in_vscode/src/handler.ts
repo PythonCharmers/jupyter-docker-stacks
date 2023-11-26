@@ -25,7 +25,7 @@ export async function requestAPI<T>(
   try {
     response = await ServerConnection.makeRequest(requestUrl, init, settings);
   } catch (error) {
-    console.log('ERORR', error);
+    console.log('ERROR', error);
     //throw new ServerConnection.NetworkError(error);
     // Check if the error is an instance of Error, which includes TypeError.
    if (error instanceof Error) {

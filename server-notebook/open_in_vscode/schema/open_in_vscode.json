@@ -1,0 +1,15 @@
+{
+  "jupyter.lab.shortcuts": [],
+  "title": "open_in_vscode",
+  "description": "open_in_vscode settings.",
+  "type": "object",
+  "properties": {
+    "extensions": {
+      "type": "array",
+      "title": "extensions",
+      "description": "File extensions that should be automatically opened in VSCode",
+      "default": [".py", ".js", ".ts", ".c", ".cpp", ".html"]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,5 +1,4 @@
-# For new cluster using chart version 1.1.3 and hub 1.4.2
-FROM jupyter/scipy-notebook:hub-1.4.2
+FROM jupyter/scipy-notebook:hub-4.0.2
 
 USER root
 RUN apt-get update
@@ -43,19 +42,14 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
         tesseract-ocr \
         imagemagick \
         fd-find \
+        ffmpeg \
+        dvipng \
+        nginx \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # >> Install ngrok
 RUN wget -O /tmp/ngrok_install.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && \
     unzip /tmp/ngrok_install.zip -d /usr/local/bin
-
-
-# > Jupyter Lab Custom Files
-
-# >> Custom Theme
-COPY charmerstheme/ /home/$NB_USER/.jupyter/lab/course_theme
-# Allow user to change their settings
-RUN fix-permissions /home/$NB_USER/.jupyter/lab
 
 
 # Go back to nb_user at end and before copying exec command script (just in case permissions are affected)
@@ -75,13 +69,7 @@ USER $NB_USER
 #     npm cache clean --force
 
 
-# >>> Custom Override Settings
-# These overrides are at the "application level" and can be overwritten by the user
-# These user settings, which will overwrite these overrides, are stored in /home/$NB_UID/
-# which, in kubernetes, are stored on a separate and persistent drive
 USER root
-RUN mkdir -p /opt/conda/share/jupyter/lab/settings
-COPY overrides.json /opt/conda/share/jupyter/lab/settings/
 
 # >>> Custom Jupyter Lab User Settings
 # Where the overrides.json does not work (for shortcut keys for instance) ...
@@ -96,7 +84,7 @@ COPY overrides.json /opt/conda/share/jupyter/lab/settings/
 RUN mkdir -p /tmp/.jupyter/lab/user-settings/'@jupyterlab'
 ENV JUPYTERLAB_SETTINGS_DIR=/home/$NB_USER/.jupyter/lab/user-settings
 # allow user settings to be changed by user!
-RUN fix-permissions /home/$NB_USER/.jupyter/lab
+#RUN fix-permissions /home/$NB_USER/.jupyter/lab
 
 
 # > JupyterLab installations
@@ -118,20 +106,15 @@ COPY testing_imports.ipynb /tmp/Testing_imports.ipynb
 # For testing outside of the hub
 COPY ./AAPL.h5 /tmp/AAPL.h5
 
-# >> Variable inspector
-# variable inspector ... may not work with jupyterlab 3.1.X ... but we can hope
-RUN pip install --no-cache-dir lckr-jupyterlab-variableinspector
-
-# >> Our Custom theme: charmerstheme
-# install themes incl our "custom charmerstheme"
-RUN pip install --no-cache-dir jupyterlab_legos_ui  && \
-    pip install --no-cache-dir jupyterlab_darkside_ui && \
-    pip install --no-cache-dir /home/$NB_USER/.jupyter/lab/course_theme
+# TODO: one of the themes below is not compatible with the latest jupyterlab; needs to be fixed?
+#RUN pip install --no-cache-dir jupyterlab_legos_ui  && \
+#    pip install --no-cache-dir jupyterlab_darkside_ui
 
 # >> jupyterlab-git
 # Install jupyterlab-git, jupyter dash extension (works?)
-RUN pip install --no-cache-dir --upgrade jupyterlab jupyterlab-git && \
-    pip install --no-cache-dir jupyter-dash
+RUN pip install --no-cache-dir --upgrade jupyterlab jupyterlab-git
+
+RUN pip install --no-cache-dir jupyter-dash
 
 # RUN pip install jupyterlab-git && \
 #     # course_theme needs to be updated to latest version of jupyterlab
@@ -145,8 +128,6 @@ RUN pip install --no-cache-dir --upgrade jupyterlab jupyterlab-git && \
 #      npm cache clean --force
 
 
-
-
 # > Python Packaging
 # Python packaging for workshops is controlled through requirements.txt file
 # Copy to image and use to install packages
@@ -155,12 +136,22 @@ RUN pip install --no-cache-dir --upgrade jupyterlab jupyterlab-git && \
 # We need conda to install some stuff becuase of weirdness with packaging
 # because we're using conda
 
+# Set mamba solver (supposed to be _way_ faster than the classic one)
+RUN conda update -n base conda
+RUN conda install -n base conda-libmamba-solver && \
+    conda config --set solver libmamba
+
+# This one is potentially problematic
+RUN pip install -vvv gensim
+
+# TODO: the file below has no versions; Put the versions
 COPY conda_requirements.txt /tmp/conda_requirements.txt
 RUN conda install --quiet --yes \
     --file /tmp/conda_requirements.txt && \
     conda clean --all -f -y
 
 # >> Conda-forge installs
+# TODO: the file below has no versions; Put the versions
 COPY conda_forge_requirements.txt /tmp/conda_forge_requirements.txt
 RUN conda install --yes \
     --channel conda-forge \
@@ -171,8 +162,19 @@ RUN conda install --yes \
 # These come last since they have less (so much less) in the way of
 # side effects
 
-COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+# TODO: the file below has no versions; Put the versions
+#COPY requirements.txt /tmp/requirements.txt
+
+ENV SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True
+
+# Some packages were moved to pip after unsuccessfully trying to install them via conda
+COPY fixed_pip_requirements.txt /tmp/fixed_pip_requirements.txt
+RUN pip install --no-cache-dir -r /tmp/fixed_pip_requirements.txt 
+
+# Some packages were moved to conda after unsuccessfully trying to install them via pip
+COPY fixed_conda_requirements.txt /tmp/fixed_conda_requirements.txt
+RUN conda install --yes --file /tmp/fixed_conda_requirements.txt && \
+    conda clean --all -f -y
 
 # >> Install altair data server from GitHub (as no recent released)
 # Necessary to use with proxy server on hub (which is in requirements.txt)
@@ -181,12 +183,10 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 RUN pip install git+https://github.com/altair-viz/altair_data_server.git@b0fdb38205877df7833481baa04b26ac6a9a245e
 
 # >> Voila
-# incompatibility issues between voila and jupyterlab resolved with pinning this version
-RUN pip install -U voila==0.2.4
+RUN pip install -U voila
 
 # >> yellowbrick/eli5
-# Unresolved incompatibility between yellowbrick/eli5 and sklearn 0.24 ... downgrade
-RUN conda install --quiet --yes scikit-learn=0.23.2 && conda clean --all -f -y
+RUN conda install --quiet --yes scikit-learn && conda clean --all -f -y
 
 
 # >> PyTorch (with CUDA)
@@ -201,14 +201,12 @@ RUN pip install --no-cache-dir torch torchvision
 # an error with "undefined symbol: H5Pset_fapl_ros3" arises
 # Pinnning a downgrade to less than h5py=3.2 seems to do the trick
 
-# Also, Lets try mamba now?!
-RUN mamba install --quiet --yes scikit-learn h5py=3.1 && \
-    mamba clean --all -f -y
+RUN conda install --quiet --yes scikit-learn h5py
 
 # >>> black downgrade
 # to be compatible with fiona and click <8.0.0
 # see https://github.com/psf/black/issues/2774
-RUN pip install -U black==21.12b0
+RUN pip install -U black
 
 # >>> jupyter-dash
 # some bug with jupyter-dash requires build and prompts for a build on log-in?
@@ -246,9 +244,14 @@ COPY testing_resources/ /tmp/testing_resources/
 # using this location as already used by scipy-notebook
 RUN mkdir -p /etc/jupyter/custom
 COPY custom /etc/jupyter/custom
+
+USER root
 RUN fix-permissions /etc/jupyter
+USER $NB_USER
+
 # Ensure /etc/jupyter is used as source of config
-ENV JUPYTER_CONFIG_DIR=/etc/jupyter/
+# TODO: fix
+#ENV JUPYTER_CONFIG_DIR=/etc/jupyter/
 
 # >> Watchmedo_tricks
 # May need to be configured for kubernetes specific setup
@@ -298,8 +301,6 @@ USER $NB_USER
 COPY .bashrc /tmp/.bashrc
 
 
-
-
 # > ?! Tableau install
 # RUN pip install pandleau tableauserverclient
 # RUN cd /tmp && \
@@ -327,8 +328,70 @@ COPY .bashrc /tmp/.bashrc
 #     fix-permissions "/home/${NB_USER}"
 
 
-# > End on NB_USER
+# >>> Custom Override Settings
+# These overrides are at the "application level" and can be overwritten by the user
+# These user settings, which will overwrite these overrides, are stored in /home/$NB_UID/
+# which, in kubernetes, are stored on a separate and persistent drive
+USER root
+RUN mkdir -p /opt/conda/share/jupyter/lab/settings 
+COPY overrides.json /opt/conda/share/jupyter/lab/settings/ 
 
+RUN chmod 777 -R /home/jovyan/.cache/
+
+# install extra libs
+USER root
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends sudo wget
+
+USER root
+RUN usermod -aG sudo jovyan
+RUN echo 'jovyan ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# install VSCode (code-server) extension
+COPY open_in_vscode/ /opt/conda/share/jupyter/lab/extensions/open_in_vscode
+RUN chmod 777 -R /opt/conda/share/jupyter/lab/extensions/
+RUN cp /opt/conda/share/jupyter/lab/extensions/open_in_vscode/open_in_vscode/vs_code_opener.py /usr/local/bin
+RUN chmod +x /usr/local/bin/vs_code_opener.py
 USER $NB_USER
+RUN export PATH="/opt/conda/bin:$PATH" && \
+    cd /opt/conda/share/jupyter/lab/extensions/open_in_vscode && \
+    pip install -e . && \
+    jupyter lab build && \
+    jupyter server extension enable open_in_vscode
 
+
+USER root
+
+# install VSCode (code-server) itself
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+
+
+COPY prepare.sh /usr/local/bin/prepare.sh
+RUN chmod +x /usr/local/bin/prepare.sh
+COPY start_procs.sh /usr/local/bin/start_procs.sh
+RUN chmod +x /usr/local/bin/start_procs.sh
+
+
+RUN prepare.sh
+
+
+# install pip if needed (seen weird errors)
+RUN /opt/conda/bin/python3.11 -m ensurepip
+
+
+# install custom pythoncharmers theme
+COPY pythoncharmers_theme/ /opt/conda/share/jupyter/lab/extensions/pythoncharmers_theme
+RUN chmod 777 -R /opt/conda/share/jupyter/lab/extensions/
+USER $NB_USER
+RUN export PATH="/opt/conda/bin:$PATH" && \
+    cd /opt/conda/share/jupyter/lab/extensions/pythoncharmers_theme && \
+    pip install -e . && jupyter lab build 
+
+# main entry point
+USER $NB_USER
+ENTRYPOINT ["start_procs.sh"]
+
+
+# > End on NB_USER
+USER $NB_USER
 

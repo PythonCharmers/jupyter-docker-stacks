@@ -3,7 +3,7 @@
         "autosaveInterval": 5
     },
     "@jupyterlab/apputils-extension:themes": {
-        "theme": "charmerstheme"
+        "theme": "pythoncharmers_theme"
     },
     "@jupyterlab/notebook-extension:tracker": {
         "codeCellConfig": {

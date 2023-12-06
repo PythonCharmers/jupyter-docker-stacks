@@ -11,11 +11,15 @@ export PATH="/opt/conda/bin:$PATH"
 #whoami > /tmp/_whoami
 
 # write proxy config (for jupyter-server-proxy extension)
-J_PROXY_CONFIG_DIR="/home/jovyan/.jupyter"
-J_PROXY_CONFIG_FILE="$JUPYTER_CONFIG_DIR/jupyter_notebook_config.py"
+# Corrected variable names
+JUPYTER_CONFIG_DIR="/home/jovyan/.jupyter"
+JUPYTER_CONFIG_FILE="$JUPYTER_CONFIG_DIR/jupyter_notebook_config.py"
+
+# Create the directory if it doesn't exist
 if [ ! -d "$JUPYTER_CONFIG_DIR" ]; then
     mkdir -p "$JUPYTER_CONFIG_DIR"
 fi
+
 # Write the configuration to the file
 cat << EOF > "$JUPYTER_CONFIG_FILE"
 c.ServerProxy.servers = {
@@ -29,6 +33,7 @@ c.ServerProxy.servers = {
     }
 }
 EOF
+
 echo "jupyter-server-proxy сonfiguration written to $JUPYTER_CONFIG_FILE"
 
 

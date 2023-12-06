@@ -359,6 +359,9 @@ RUN export PATH="/opt/conda/bin:$PATH" && \
     jupyter lab build && \
     jupyter server extension enable open_in_vscode
 
+# disable pop-up "Would you like to receive official Jupyter news?"
+RUN jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
 
 USER root
 

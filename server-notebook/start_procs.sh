@@ -36,13 +36,8 @@ EOF
 
 echo "jupyter-server-proxy сonfiguration written to $JUPYTER_CONFIG_FILE"
 
-
-# TODO: the one below needs to be updated automatically from k8s? ideally matching the Jupyterhub user password?
-VSCODE_PASSWORD="A038Sdj49889SDjka9SdkhaZ"
-
 # Start code-server in the background
-export PASSWORD="$VSCODE_PASSWORD"
-code-server --bind-addr localhost:14850 --auth password &
+code-server --bind-addr localhost:14850 --auth none &
 
 # Install the MS Python extension
 code-server --install-extension ms-python.python --force

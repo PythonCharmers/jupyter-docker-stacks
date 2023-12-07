@@ -163,9 +163,6 @@ RUN conda install --yes \
 # These come last since they have less (so much less) in the way of
 # side effects
 
-# TODO: the file below has no versions; Put the versions
-#COPY requirements.txt /tmp/requirements.txt
-
 ENV SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True
 
 # Some packages were moved to pip after unsuccessfully trying to install them via conda

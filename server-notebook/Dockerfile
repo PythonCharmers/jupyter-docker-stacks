@@ -104,6 +104,7 @@ USER $NB_USER
 # >> Testing suite for the image
 # For testing the image
 COPY testing_imports.ipynb /tmp/Testing_imports.ipynb
+COPY testing_resources/abalone.xlsx /tmp/abalone.xlsx
 # For testing outside of the hub
 COPY ./AAPL.h5 /tmp/AAPL.h5
 
@@ -145,10 +146,9 @@ RUN conda install -n base conda-libmamba-solver && \
 # This one is potentially problematic
 RUN pip install -vvv gensim
 
-# TODO: the file below has no versions; Put the versions
-COPY conda_requirements.txt /tmp/conda_requirements.txt
+COPY conda_requirements_with_versions.txt /tmp/conda_requirements_with_versions.txt
 RUN conda install --quiet --yes \
-    --file /tmp/conda_requirements.txt && \
+    --file /tmp/conda_requirements_with_versions.txt && \
     conda clean --all -f -y
 
 # >> Conda-forge installs
@@ -170,12 +170,7 @@ ENV SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True
 
 # Some packages were moved to pip after unsuccessfully trying to install them via conda
 COPY fixed_pip_requirements.txt /tmp/fixed_pip_requirements.txt
-RUN pip install --no-cache-dir -r /tmp/fixed_pip_requirements.txt 
-
-# Some packages were moved to conda after unsuccessfully trying to install them via pip
-COPY fixed_conda_requirements.txt /tmp/fixed_conda_requirements.txt
-RUN conda install --yes --file /tmp/fixed_conda_requirements.txt && \
-    conda clean --all -f -y
+RUN pip install --no-cache-dir -r /tmp/fixed_pip_requirements.txt
 
 # >> Install altair data server from GitHub (as no recent released)
 # Necessary to use with proxy server on hub (which is in requirements.txt)
@@ -186,22 +181,12 @@ RUN pip install git+https://github.com/altair-viz/altair_data_server.git@b0fdb38
 # >> Voila
 RUN pip install -U voila
 
-# scikit-learn
-RUN conda install --quiet --yes scikit-learn && conda clean --all -f -y
-
 # >> PyTorch (with CUDA)
 RUN pip install --no-cache-dir torch torchvision
 
 # >> !! Temporary fixes
 
 # SHOULD FOLD THESE INTO A CLEAN BUILD FOR NEXT MAJOR REVISION!
-
-# >>> for h5py
-# see https://github.com/h5py/h5py/issues/1880
-# an error with "undefined symbol: H5Pset_fapl_ros3" arises
-# Pinnning a downgrade to less than h5py=3.2 seems to do the trick
-
-RUN conda install --quiet --yes scikit-learn h5py
 
 # >>> black downgrade
 # to be compatible with fiona and click <8.0.0

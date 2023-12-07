@@ -29,3 +29,4 @@ keyrings.cryptfile
 scapy
 pdf2image
 correcthorse
+rioxarray

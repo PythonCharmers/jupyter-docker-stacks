@@ -21,8 +21,11 @@ ortools
 gekko
 redis
 
+vega_datasets
+flask_apscheduler
+
 # potentially problematic (old, dead) libraries
 keyrings.cryptfile
 scapy
 pdf2image
-
+correcthorse

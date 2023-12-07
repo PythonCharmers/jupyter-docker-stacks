@@ -45,6 +45,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
         ffmpeg \
         dvipng \
         nginx \
+        redis \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # >> Install ngrok
@@ -185,9 +186,8 @@ RUN pip install git+https://github.com/altair-viz/altair_data_server.git@b0fdb38
 # >> Voila
 RUN pip install -U voila
 
-# >> yellowbrick/eli5
+# scikit-learn
 RUN conda install --quiet --yes scikit-learn && conda clean --all -f -y
-
 
 # >> PyTorch (with CUDA)
 RUN pip install --no-cache-dir torch torchvision
@@ -365,6 +365,8 @@ RUN jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
 USER root
 
+CMD ["/etc/init.d/redis-server", "start"]
+
 # install VSCode (code-server) itself
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
@@ -381,6 +383,9 @@ RUN prepare.sh
 # install pip if needed (seen weird errors)
 RUN /opt/conda/bin/python3.11 -m ensurepip
 
+# monkey-patching buggy eli5 library (see https://github.com/eli5-org/eli5/issues/39)
+COPY fixed_eli5/permutation_importance.py /opt/conda/lib/python3.11/site-packages/eli5/sklearn/permutation_importance.py
+COPY fixed_eli5/utils.py /opt/conda/lib/python3.11/site-packages/eli5/lime/utils.py
 
 # install custom pythoncharmers theme
 COPY pythoncharmers_theme/ /opt/conda/share/jupyter/lab/extensions/pythoncharmers_theme

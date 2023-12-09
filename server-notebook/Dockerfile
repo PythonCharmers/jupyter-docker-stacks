@@ -393,7 +393,7 @@ RUN export PATH="/opt/conda/bin:$PATH" && \
     pip install -e . && jupyter lab build 
 
 # main entry point
-USER $NB_USER
+USER root
 ENTRYPOINT ["start_procs.sh"]
 
 

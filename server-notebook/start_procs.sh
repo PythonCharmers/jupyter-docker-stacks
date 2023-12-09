@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# start redis
+/etc/init.d/redis-server start
+
 # Check if the current user is root, and if so, switch to jovyan
 if [ "$(whoami)" = "root" ]; then
     su jovyan -c "$0 $*"

@@ -42,8 +42,26 @@ echo "jupyter-server-proxy сonfiguration written to $JUPYTER_CONFIG_FILE"
 # Start code-server in the background
 code-server --bind-addr localhost:14850 --auth none &
 
-# Install the MS Python extension
+# Install code-server extension
 code-server --install-extension ms-python.python --force
+code-server --install-extension ms-python.pylint --force
+
+# save code-server settings
+CODE_SERVER_USER_SETTINGS_FILE="/home/jovyan/.local/share/code-server/User/settings.json"
+cat << EOF > "$CODE_SERVER_USER_SETTINGS_FILE"
+{
+    "security.workspace.trust.untrustedFiles": "open",
+    "python.testing.pytestEnabled": true,
+    "window.menuBarVisibility": "classic"
+}
+EOF
+
+CODE_SERVER_MACHINE_SETTINGS_FILE="/home/jovyan/.local/share/code-server/Machine/settings.json"
+cat << EOF > "$CODE_SERVER_MACHINE_SETTINGS_FILE"
+{
+    "python.defaultInterpreterPath": "/opt/conda/bin/python"
+}
+EOF
 
 # activate env vars in order to make jupyterlab work properly
 source /tmp/_env_vars.sh

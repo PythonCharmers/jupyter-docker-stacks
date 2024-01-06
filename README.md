@@ -5,6 +5,9 @@
 
 # Python Charmers version of Jupyter Docker Stacks
 
+**WARNING! This repository is no longer actively maintained. Future developments and updates will be carried 
+out in the GenericJupyterCluster repository.**
+
 Jupyter Docker Stacks are a set of ready-to-run [Docker images](https://hub.docker.com/u/jupyter)
 containing Jupyter applications and interactive computing tools.
 
